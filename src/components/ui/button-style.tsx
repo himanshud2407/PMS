@@ -2,12 +2,18 @@ import React from "react";
 import { motion } from "motion/react";
 import { ArrowRight } from "lucide-react";
 
-const Button = () => {
+interface ButtonProps {
+  onClick?: () => void;
+  label?: string;
+}
+
+const Button = ({ onClick, label = "Start Your Journey" }: ButtonProps) => {
   return (
     <motion.button
       whileHover="hover"
       whileTap="tap"
       initial="initial"
+      onClick={onClick}
       className="relative group flex items-center gap-4 bg-primary px-8 py-4 rounded-[2rem] overflow-hidden shadow-2xl shadow-primary/20 cursor-pointer"
     >
       {/* Animated Gradient Background Overlay */}
@@ -26,7 +32,7 @@ const Button = () => {
 
       {/* Button Text */}
       <span className="relative z-10 text-white font-display text-xl font-bold tracking-tight">
-        Start Your Journey
+        {label}
       </span>
 
       {/* Icon Container */}

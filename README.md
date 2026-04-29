@@ -2,17 +2,46 @@
 <img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
 </div>
 
-# Patho Lab
+# 🔬 Dr. Baviskar Pathology Lab
 
-This project contains everything you need to run the Patho Lab application locally.
+Welcome to **Dr. Baviskar Pathology Lab** – a state-of-the-art medical diagnostic platform designed for efficiency, accuracy, and patient comfort.
 
-## Run Locally
+![Lab Interior](docs/images/lab_interior.png)
 
-**Prerequisites:**  Node.js
+## 🌟 Key Features
 
+- **Advanced Diagnostics**: Real-time test tracking and accurate reporting.
+* **Cinematic Experience**: High-performance UI with smooth scroll-triggered animations.
+* **Glassmorphic Design**: Modern, premium aesthetic for a professional medical feel.
+* **Mobile Optimized**: Fully responsive interface for on-the-go health management.
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+<div align="center">
+  <img src="docs/images/equipment.png" width="45%" />
+  <img src="docs/images/scientist.png" width="45%" />
+</div>
+
+## 🚀 Run Locally
+
+**Prerequisites:**  Node.js (v18+)
+
+1. **Clone & Install**:
+   ```bash
+   npm install
+   ```
+2. **Environment Setup**:
+   Set the `GEMINI_API_KEY` in `.env.local` to your Gemini API key.
+3. **Launch**:
+   ```bash
+   npm run dev
+   ```
+
+## 🛠️ Tech Stack
+
+- **Frontend**: React, Tailwind CSS, Framer Motion
+- **Icons**: Lucide React
+- **Animations**: GSAP, Motion/React
+- **Type**: TypeScript
+
+---
+
+© 2025 Dr. Baviskar Pathology Lab. All rights reserved.

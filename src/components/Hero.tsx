@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "motion/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Button from "./ui/button-style";
+import BookTestModal from "./BookTestModal";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -18,6 +19,7 @@ export default function Hero() {
   const statsRef = useRef<HTMLDivElement>(null);
 
   const [loadingProgress, setLoadingProgress] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -230,11 +232,8 @@ export default function Hero() {
           className="absolute top-[40%] md:top-1/2 -translate-y-1/2 left-6 lg:left-12 right-6 md:right-auto max-w-3xl"
         >
           <h1 className="text-3xl md:text-7xl font-display font-medium leading-[1.2] md:leading-[1.1] mb-3 md:mb-6 drop-shadow-[0_4px_20px_rgba(0,0,0,0.8)]">
-            Advance <br className="hidden md:block" />
-            <span className="text-blue-400 italic drop-shadow-[0_0_20px_rgba(96,165,250,0.4)]">
-              Lab testing for
-            </span>{" "}
-            <br />
+            Best <span className="text-blue-400 italic">Pathology Lab</span> <br className="hidden md:block" />
+            in Pune for <br />
             Better Health
           </h1>
           <p className="text-lg md:text-2xl text-gray-200 max-w-xl drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] mb-6 md:mb-10">
@@ -329,10 +328,11 @@ export default function Hero() {
             </span>
           </h2>
           <div className="pointer-events-auto flex justify-center">
-            <Button />
+            <Button onClick={() => setIsModalOpen(true)} />
           </div>
         </div>
       </div>
+      <BookTestModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
 
       {/* Global Loader - Placed last to naturally layer on top */}
       <AnimatePresence>
@@ -352,7 +352,7 @@ export default function Hero() {
                 >
                   <img 
                     src="/nav-logo.png" 
-                    alt="Lunira Logo" 
+                    alt="Dr. Baviskar Logo" 
                     className="h-14 md:h-16 w-auto object-contain drop-shadow-[0_0_15px_rgba(59,130,246,0.5)]"
                   />
                 </motion.div>

@@ -38,7 +38,7 @@ export default function Footer() {
     ],
     Company: [
       { name: 'Features', href: '#services' },
-      { name: 'Why Lunira', href: '#about' },
+      { name: 'Why Dr. Baviskar', href: '#about' },
       { name: 'Blog', href: '#blog' },
       { name: 'Testimonials', href: '#testimonials' }
     ],
@@ -192,7 +192,7 @@ export default function Footer() {
 
       {/* Copyright */}
       <div className="max-w-7xl mx-auto mt-24 pt-8 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-gray-400">
-        <p>© 2025 Patho Lab Intelligence. All rights reserved.</p>
+        <p>© 2026 Dr. Baviskar Pathology Lab. All rights reserved.</p>
         <div className="flex gap-6">
           <a href="#" className="hover:text-primary transition-colors">
             Privacy Policy
