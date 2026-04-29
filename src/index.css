@@ -10,6 +10,16 @@
   --color-secondary: #F4F7FF;
   --color-dark: #12141D;
   --color-gray-soft: #F9FAFB;
+
+  @keyframes shimmer {
+    from { transform: translateX(-100%) skewX(-25deg); }
+    to { transform: translateX(200%) skewX(-25deg); }
+  }
+  --animate-shimmer: shimmer 1.5s infinite;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 @layer base {

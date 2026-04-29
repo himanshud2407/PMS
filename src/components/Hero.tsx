@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Button from "./ui/button-style";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -95,17 +96,38 @@ export default function Hero() {
     // Initial render attempt in case of fast caching
     render();
 
-    // 0. Entry animation for stats (visible on load)
-    if (statsRef.current) {
-      gsap.from(statsRef.current.children, {
-        opacity: 0,
-        y: 30,
-        filter: "blur(10px)",
-        stagger: 0.15,
-        duration: 1.2,
-        ease: "power3.out",
-        delay: 1, // Delay to sync with image loading
-      });
+    // Entry animations for UI elements (triggered when loading completes)
+    if (loadingProgress === 100) {
+      const introTl = gsap.timeline();
+      
+      if (introRef.current) {
+        // Animate only the text elements first
+        const textElements = introRef.current.querySelectorAll('h1, p');
+        introTl.from(textElements, {
+          opacity: 0,
+          y: 40,
+          filter: "blur(10px)",
+          stagger: 0.2,
+          duration: 1.2,
+          ease: "power4.out",
+        });
+      }
+
+      if (statsRef.current) {
+        // Then animate stats specifically to avoid double-animation conflicts
+        introTl.fromTo(statsRef.current.children, 
+          { opacity: 0, y: 30, filter: "blur(5px)" },
+          { 
+            opacity: 1, 
+            y: 0, 
+            filter: "blur(0px)",
+            stagger: 0.15,
+            duration: 1,
+            ease: "power3.out"
+          }, 
+          "-=0.6" // Slight overlap with text animation
+        );
+      }
     }
 
     const tl = gsap.timeline({
@@ -180,73 +202,15 @@ export default function Hero() {
       // Restore original background if needed
       document.body.style.backgroundColor = originalBg;
     };
-  }, []);
+  }, [loadingProgress]);
 
   return (
     <section
+      id="home"
       ref={containerRef}
       className="relative bg-black text-white overflow-hidden h-screen h-[100dvh] w-full"
     >
       <div className="absolute inset-0 w-full h-full z-0 flex items-center justify-center bg-black">
-        <AnimatePresence>
-          {loadingProgress < 100 && (
-            <motion.div 
-              initial={{ opacity: 1 }}
-              exit={{ opacity: 0, scale: 1.05, filter: "blur(20px)" }}
-              transition={{ duration: 0.8, ease: "easeInOut" }}
-              className="absolute inset-0 z-[100] bg-black flex flex-col items-center justify-center p-6"
-            >
-              <div className="w-full max-w-md space-y-8">
-                <div className="space-y-4 text-center">
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="flex items-center justify-center gap-3 mb-2"
-                  >
-                    <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center shadow-[0_0_20px_rgba(59,130,246,0.5)]">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 2L2 12L12 22L22 12L12 2Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </div>
-                    <span className="text-2xl font-bold font-display tracking-tight text-white">Lunira</span>
-                  </motion.div>
-                  <p className="text-blue-400 text-xs tracking-[0.3em] uppercase font-bold animate-pulse">
-                    {loadingProgress < 40 ? "Calibrating Medical Systems" : 
-                     loadingProgress < 80 ? "Optimizing Diagnostic View" : 
-                     "Preparing Cinematic Sequence"}
-                  </p>
-                </div>
-
-                <div className="relative h-1 w-full bg-white/10 rounded-full overflow-hidden backdrop-blur-sm">
-                  <motion.div 
-                    className="absolute inset-y-0 left-0 bg-gradient-to-r from-blue-600 via-blue-400 to-cyan-400 shadow-[0_0_15px_rgba(59,130,246,0.6)]"
-                    initial={{ width: "0%" }}
-                    animate={{ width: `${loadingProgress}%` }}
-                    transition={{ type: "spring", bounce: 0, duration: 0.5 }}
-                  />
-                </div>
-
-                <div className="flex justify-between items-end">
-                  <div className="space-y-1">
-                    <span className="text-[10px] text-white/30 uppercase tracking-widest block font-medium">Progress</span>
-                    <span className="text-4xl font-display font-bold text-white tabular-nums">
-                      {loadingProgress}<span className="text-blue-500 text-xl">%</span>
-                    </span>
-                  </div>
-                  <div className="text-right text-[10px] text-white/30 uppercase tracking-widest font-medium pb-1">
-                    Version 2.4.0 <br />
-                    System Stable
-                  </div>
-                </div>
-              </div>
-
-              {/* Decorative Elements */}
-              <div className="absolute inset-0 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:40px_40px] opacity-20 pointer-events-none"></div>
-              <div className="absolute top-12 left-12 w-24 h-24 border-t border-l border-white/10 rounded-tl-3xl pointer-events-none"></div>
-              <div className="absolute bottom-12 right-12 w-24 h-24 border-b border-r border-white/10 rounded-br-3xl pointer-events-none"></div>
-            </motion.div>
-          )}
-        </AnimatePresence>
         <canvas
           ref={canvasRef}
           className="absolute inset-0 w-full h-full object-cover z-0 will-change-transform"
@@ -257,13 +221,15 @@ export default function Hero() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-black/70 pointer-events-none z-10"></div>
       </div>
 
-      <div className="relative z-20 w-full h-full max-w-7xl mx-auto px-6 lg:px-12 pointer-events-none">
+      <div
+        className={`relative z-20 w-full h-full max-w-7xl mx-auto px-6 lg:px-12 pointer-events-none transition-opacity duration-500 ${loadingProgress < 100 ? "opacity-0" : "opacity-100"}`}
+      >
         {/* Intro */}
         <div
           ref={introRef}
-          className="absolute top-[45%] md:top-1/2 -translate-y-1/2 left-6 lg:left-12 right-6 md:right-auto max-w-3xl"
+          className="absolute top-[40%] md:top-1/2 -translate-y-1/2 left-6 lg:left-12 right-6 md:right-auto max-w-3xl"
         >
-          <h1 className="text-3xl md:text-7xl font-display font-medium leading-[1.2] md:leading-[1.1] mb-4 md:mb-6 drop-shadow-[0_4px_20px_rgba(0,0,0,0.8)]">
+          <h1 className="text-3xl md:text-7xl font-display font-medium leading-[1.2] md:leading-[1.1] mb-3 md:mb-6 drop-shadow-[0_4px_20px_rgba(0,0,0,0.8)]">
             Advance <br className="hidden md:block" />
             <span className="text-blue-400 italic drop-shadow-[0_0_20px_rgba(96,165,250,0.4)]">
               Lab testing for
@@ -271,14 +237,14 @@ export default function Hero() {
             <br />
             Better Health
           </h1>
-          <p className="text-lg md:text-2xl text-gray-200 max-w-xl drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] mb-8 md:mb-10">
+          <p className="text-lg md:text-2xl text-gray-200 max-w-xl drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] mb-6 md:mb-10">
             From routine blood tests to specialized diagnostics, we deliver
             reliable results with cutting-edge technology.
           </p>
 
           <div
             ref={statsRef}
-            className="flex flex-wrap gap-4 md:gap-12 pointer-events-auto"
+            className="flex flex-wrap gap-x-8 gap-y-4 md:gap-12 pointer-events-auto"
           >
             <div className="relative group">
               <div className="text-2xl md:text-4xl font-bold text-white mb-0 md:mb-1 drop-shadow-md">
@@ -356,17 +322,82 @@ export default function Hero() {
           ref={finalRef}
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center opacity-0 w-full max-w-4xl"
         >
-          <h2 className="text-4xl md:text-8xl font-display font-medium mb-6 md:mb-8 drop-shadow-[0_4px_20_rgba(0,0,0,0.8)]">
-            Your Future, <br />
+          <h2 className="text-4xl md:text-7xl font-display font-medium mb-6 md:mb-8 drop-shadow-[0_4px_20_rgba(0,0,0,0.8)]">
+            Every Cell Tells <br />
             <span className="text-primary italic drop-shadow-[0_0_30px_rgba(37,99,235,0.6)]">
-              Secured Today
+              A Story
             </span>
           </h2>
-          <button className="pointer-events-auto bg-primary hover:bg-primary-hover text-white px-8 md:px-12 py-4 md:py-5 rounded-full font-semibold transition-all hover:scale-105 active:scale-95 shadow-[0_0_40px_rgba(37,99,235,0.6)] text-base md:text-lg">
-            Start Your Journey
-          </button>
+          <div className="pointer-events-auto flex justify-center">
+            <Button />
+          </div>
         </div>
       </div>
+
+      {/* Global Loader - Placed last to naturally layer on top */}
+      <AnimatePresence>
+        {loadingProgress < 100 && (
+          <motion.div
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0, scale: 1.05, filter: "blur(20px)" }}
+            transition={{ duration: 0.8, ease: "easeInOut" }}
+            className="absolute inset-0 z-[100] bg-black flex flex-col items-center justify-center p-6"
+          >
+            <div className="w-full max-w-md space-y-8">
+              <div className="space-y-4 text-center">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex items-center justify-center mb-4"
+                >
+                  <img 
+                    src="/nav-logo.png" 
+                    alt="Lunira Logo" 
+                    className="h-14 md:h-16 w-auto object-contain drop-shadow-[0_0_15px_rgba(59,130,246,0.5)]"
+                  />
+                </motion.div>
+                <p className="text-blue-400 text-xs tracking-[0.3em] uppercase font-bold animate-pulse">
+                  {loadingProgress < 40
+                    ? "Calibrating Medical Systems"
+                    : loadingProgress < 80
+                      ? "Optimizing Diagnostic View"
+                      : "Preparing Cinematic Sequence"}
+                </p>
+              </div>
+
+              <div className="relative h-1 w-full bg-white/10 rounded-full overflow-hidden backdrop-blur-sm">
+                <motion.div
+                  className="absolute inset-y-0 left-0 bg-gradient-to-r from-blue-600 via-blue-400 to-cyan-400 shadow-[0_0_15px_rgba(59,130,246,0.6)]"
+                  initial={{ width: "0%" }}
+                  animate={{ width: `${loadingProgress}%` }}
+                  transition={{ type: "spring", bounce: 0, duration: 0.5 }}
+                />
+              </div>
+
+              <div className="flex justify-between items-end">
+                <div className="space-y-1">
+                  <span className="text-[10px] text-white/30 uppercase tracking-widest block font-medium">
+                    Progress
+                  </span>
+                  <span className="text-4xl font-display font-bold text-white tabular-nums">
+                    {loadingProgress}
+                    <span className="text-blue-500 text-xl">%</span>
+                  </span>
+                </div>
+                <div className="text-right text-[10px] text-white/30 uppercase tracking-widest font-medium pb-1">
+                  Version 2.4.0 <br />
+                  System Stable
+                </div>
+              </div>
+            </div>
+
+            {/* Decorative Elements */}
+            <div className="absolute inset-0 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:40px_40px] opacity-20 pointer-events-none"></div>
+            <div className="absolute top-12 left-12 w-24 h-24 border-t border-l border-white/10 rounded-tl-3xl pointer-events-none"></div>
+            <div className="absolute bottom-12 right-12 w-24 h-24 border-b border-r border-white/10 rounded-br-3xl pointer-events-none"></div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

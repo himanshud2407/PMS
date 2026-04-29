@@ -12,7 +12,7 @@ export default function FAQSection() {
   const [activeIndex, setActiveIndex] = useState<number | null>(0);
 
   return (
-    <section className="px-6 lg:px-12 py-24 bg-gray-soft/50">
+    <section id="faq" className="px-4 lg:px-12 py-24 bg-gray-soft/50">
       <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-start">
         <div>
           <span className="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-4 block">Our FAQ</span>
@@ -59,7 +59,6 @@ export default function FAQSection() {
             src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&q=80&w=800" 
             alt="Doctor and Patient" 
             className="w-full h-full object-cover"
-            referrerPolicy="no-referrer"
           />
         </motion.div>
       </div>

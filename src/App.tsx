@@ -6,6 +6,7 @@
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import HonorsBanner from './components/HonorsBanner';
+import MarqueeSection from './components/MarqueeSection';
 import AboutSection from './components/AboutSection';
 import ServicesSection from './components/ServicesSection';
 import TeamSection from './components/TeamSection';
@@ -22,6 +23,7 @@ export default function App() {
       <main>
         <Hero />
         <HonorsBanner />
+        <MarqueeSection />
         <AboutSection />
         <ServicesSection />
         <TeamSection />

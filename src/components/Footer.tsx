@@ -4,103 +4,208 @@
  */
 
 import { motion } from 'motion/react';
-import { Instagram, Facebook, Twitter } from 'lucide-react';
+import { useState } from 'react';
+import { 
+  Instagram, 
+  Facebook, 
+  Twitter, 
+  Linkedin, 
+  Mail, 
+  Phone, 
+  MapPin, 
+  CheckCircle2,
+  ArrowRight
+} from 'lucide-react';
+import { cn } from '@/src/lib/utils';
+import ButtonWithIcon from './ui/button-with-icon';
+import BookTestModal from './BookTestModal';
 
 export default function Footer() {
-  return (
-    <section className="px-6 lg:px-12 py-32 bg-white relative">
-      <div className="max-w-7xl mx-auto text-center relative mb-40">
-        <div className="absolute inset-0 flex items-center justify-center -z-10">
-          {[1, 2, 3].map((i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ delay: i * 0.2 }}
-              className="absolute rounded-full border border-gray-50"
-              style={{ width: `${i * 300}px`, height: `${i * 300}px` }}
-            />
-          ))}
-        </div>
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const footerLinks = {
+    Tests: [
+      { name: 'CBC Test', href: '#shop' },
+      { name: 'Thyroid Profile', href: '#shop' },
+      { name: 'Malaria Test', href: '#shop' },
+      { name: 'Urine Culture', href: '#shop' },
+      { name: 'Full Body Checkup', href: '#shop' }
+    ],
+    Product: [
+      { name: 'Admissions', href: '#shop' },
+      { name: 'Charting', href: '#services' },
+      { name: 'Billing', href: '#faq' },
+      { name: 'Outcomes', href: '#testimonials' }
+    ],
+    Company: [
+      { name: 'Features', href: '#services' },
+      { name: 'Why Lunira', href: '#about' },
+      { name: 'Blog', href: '#blog' },
+      { name: 'Testimonials', href: '#testimonials' }
+    ],
+    Support: [
+      { name: 'Contact Us', href: 'mailto:info@drbaviskar.com' },
+      { name: 'Privacy Policy', href: '#faq' },
+      { name: 'Terms of Service', href: '#faq' }
+    ]
+  };
 
+  return (
+    <section className="bg-white pt-24 pb-12 px-6 lg:px-12">
+      {/* CTA Section */}
+      <div className="max-w-7xl mx-auto mb-32">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
-          className="relative z-10"
+          viewport={{ once: true }}
+          className="relative rounded-[3rem] overflow-hidden bg-gradient-to-br from-[#E6F0FF] via-[#F5F9FF] to-[#FFFFFF] p-12 md:p-20 text-center border border-blue-50 shadow-sm"
         >
-          <div className="flex justify-center -space-x-8 mb-12">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, scale: 0 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ delay: i * 0.1 }}
-                className="w-16 h-16 rounded-full border-4 border-white shadow-lg overflow-hidden translate-y-[20px]"
-                style={{ marginBottom: `${Math.sin(i) * 40}px` }}
+          {/* Logo Icon */}
+          <div className="flex justify-center mb-8">
+            {/* <div className="w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center border border-blue-50">
+              <div className="w-8 h-8 bg-primary rounded-md flex items-center justify-center">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  className="w-5 h-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 4V20M4 12H20"
+                    stroke="currentColor"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </div>
+            </div> */}
+            <img src="/nav-logo.png" alt="Logo" className="scale-50" />
+          </div>
+
+          <h2 className="text-4xl md:text-6xl font-display font-bold text-gray-900 mb-8 tracking-tight">
+            Book Your Test with{" "}
+            <span className="text-primary">Dr. Baviskar</span> today!
+          </h2>
+
+          <div className="flex flex-wrap justify-center gap-6 md:gap-10 mb-12">
+            {[
+              "Customized Setup",
+              "Easily switch from old provider",
+              "No hidden fees",
+            ].map((feature) => (
+              <div
+                key={feature}
+                className="flex items-center gap-2 text-sm font-medium text-gray-600"
               >
-                <img src={`https://i.pravatar.cc/100?u=user${i}`} alt="User" />
-              </motion.div>
+                <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+                <span>{feature}</span>
+              </div>
             ))}
           </div>
 
-          <h2 className="text-4xl md:text-5xl font-display font-medium mb-4 max-w-2xl mx-auto leading-tight">
-            Join our health community and take the first step towards a healthier you.
-          </h2>
-          
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            whileInView={{ scale: 1, opacity: 1 }}
-            className="text-8xl md:text-[12rem] font-bold font-display text-primary tracking-tighter"
-          >
-            10,000,000
-          </motion.div>
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+            <ButtonWithIcon
+              label="Book a Demo"
+              onClick={() => setIsModalOpen(true)}
+              className="bg-primary text-white shadow-lg shadow-primary/20"
+            />
+            {/* <ButtonWithIcon 
+              label="Learn More" 
+              className="bg-white text-gray-900 border border-gray-200 shadow-sm"
+            /> */}
+          </div>
         </motion.div>
       </div>
 
-      {/* Floating Footer Card */}
-      <footer className="max-w-4xl mx-auto bg-gray-soft rounded-[2.5rem] p-8 flex flex-col md:flex-row items-center justify-between shadow-xl">
-        <div className="flex items-center gap-2 mb-6 md:mb-0">
-          <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2L2 12L12 22L22 12L12 2Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M12 8L8 12L12 16L16 12L12 8Z" fill="white"/>
-            </svg>
+      {/* Main Footer */}
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-12 lg:gap-8">
+        {/* Brand & Contact */}
+        <div className="lg:col-span-2 space-y-8">
+          <div className="flex items-center gap-2">
+            <img src="/nav-logo.png" alt="Logo" className="h-10 rounded-xl" />
           </div>
-          <span className="text-2xl font-bold font-display tracking-tight">Lunira</span>
+
+          <div className="space-y-4 text-sm text-gray-500 font-medium">
+            <div className="flex items-start gap-3">
+              <MapPin className="w-4 h-4 text-primary mt-0.5 shrink-0" />
+              <p>
+                Shop No 1, Bhalerao Corner, Near Vijay Sales, Rahatani Road,
+                Pimple Saudagar, Pune-411027, Maharashtra
+              </p>
+            </div>
+            <div className="flex items-center gap-3">
+              <Mail className="w-4 h-4 text-primary shrink-0" />
+              <a
+                href="mailto:info@patholab.io"
+                className="hover:text-primary transition-colors"
+              >
+                info@drbaviskar.com
+              </a>
+            </div>
+            <div className="flex items-center gap-3">
+              <Phone className="w-4 h-4 text-primary shrink-0" />
+              <a
+                href="tel:"
+                className="hover:text-primary transition-colors"
+              >
+                +91-86052 92626
+              </a>
+            </div>
+          </div>
+
+          {/* Social Icons */}
+          <div className="flex gap-3">
+            {[Twitter, Linkedin, Instagram, Facebook].map((Icon, i) => (
+              <a
+                key={i}
+                href="#"
+                className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-600 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all"
+              >
+                <Icon size={18} />
+              </a>
+            ))}
+          </div>
         </div>
 
-        <div className="flex items-center gap-6 mb-6 md:mb-0">
-          <a href="#" className="font-semibold hover:text-primary transition-colors">Sign In</a>
-          <button className="bg-primary hover:bg-primary-hover text-white px-8 py-3 rounded-full font-semibold transition-all">
-            Get In Touch
-          </button>
-        </div>
-
-        <div className="flex items-center gap-4">
-          <a href="#" className="p-2 hover:bg-white rounded-full transition-all text-gray-400 hover:text-primary">
-            <Facebook size={20} />
-          </a>
-          <a href="#" className="p-2 hover:bg-white rounded-full transition-all text-gray-400 hover:text-primary">
-            <Twitter size={20} />
-          </a>
-          <a href="#" className="p-2 hover:bg-white rounded-full transition-all text-gray-400 hover:text-primary">
-            <Instagram size={20} />
-          </a>
-        </div>
-      </footer>
-
-      <div className="max-w-7xl mx-auto mt-12 flex flex-col md:flex-row justify-between text-xs text-gray-400 px-8">
-        <div className="flex gap-8 mb-4 md:mb-0">
-          <a href="#" className="hover:text-dark">About V1</a>
-          <a href="#" className="hover:text-dark">About V2</a>
-          <a href="#" className="hover:text-dark">About V3</a>
-        </div>
-        <div className="flex gap-8">
-          <a href="#" className="hover:text-dark">Style Guide</a>
-          <a href="#" className="hover:text-dark">Licensing</a>
-          <a href="#" className="hover:text-dark">Change log</a>
+        {/* Links */}
+        <div className="lg:col-span-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12 lg:gap-8">
+          {Object.entries(footerLinks).map(([title, links]) => (
+            <div key={title} className="space-y-6">
+              <h4 className="font-bold text-gray-900 text-sm uppercase tracking-wider">
+                {title}
+              </h4>
+              <ul className="space-y-4">
+                {links.map((link) => (
+                  <li key={link.name}>
+                    <a
+                      href={link.href}
+                      className="text-gray-500 hover:text-primary text-sm font-medium transition-colors"
+                    >
+                      {link.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
       </div>
+
+      {/* Copyright */}
+      <div className="max-w-7xl mx-auto mt-24 pt-8 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-gray-400">
+        <p>© 2025 Patho Lab Intelligence. All rights reserved.</p>
+        <div className="flex gap-6">
+          <a href="#" className="hover:text-primary transition-colors">
+            Privacy Policy
+          </a>
+          <a href="#" className="hover:text-primary transition-colors">
+            Terms of Service
+          </a>
+          <a href="#" className="hover:text-primary transition-colors">
+            Cookie Settings
+          </a>
+        </div>
+      </div>
+      <BookTestModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </section>
   );
 }
