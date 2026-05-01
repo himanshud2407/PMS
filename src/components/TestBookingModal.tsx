@@ -161,13 +161,13 @@ export function TestBookingModal({
               <motion.div 
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="py-12 flex flex-col items-center text-center space-y-4"
+                className="py-8 md:py-12 flex flex-col items-center text-center space-y-4"
               >
                 <div className="h-16 w-16 bg-green-100 rounded-full flex items-center justify-center">
                   <Globe className="h-8 w-8 text-green-600" />
                 </div>
-                <h3 className="text-2xl font-bold">Booking Confirmed!</h3>
-                <p className="text-muted-foreground max-w-sm">
+                <h3 className="text-xl md:text-2xl font-bold">Booking Confirmed!</h3>
+                <p className="text-sm md:text-base text-muted-foreground max-w-sm px-4">
                   Your appointment for <strong>{testName || "Diagnostic Test"}</strong> has been scheduled successfully. We will contact you shortly for confirmation.
                 </p>
                 <Button onClick={onClose} className="mt-4 rounded-xl px-8">
@@ -178,9 +178,9 @@ export function TestBookingModal({
               <>
                 {/* Step 1: Patient Information */}
                 {currentStep === 1 && (
-                  <div className="space-y-6">
-                    <h3 className="text-lg font-medium">Patient Details</h3>
-                    <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                  <div className="space-y-4 md:space-y-6">
+                    <h3 className="text-base md:text-lg font-medium">Patient Details</h3>
+                    <div className="grid grid-cols-1 gap-4 md:gap-6 md:grid-cols-2">
                       <div className="space-y-2">
                         <Label htmlFor="fullName">Full Name</Label>
                         <div className="relative">
@@ -247,9 +247,9 @@ export function TestBookingModal({
 
             {/* Step 2: Appointment Details */}
             {currentStep === 2 && (
-              <div className="space-y-6">
-                <h3 className="text-lg font-medium">Appointment Details</h3>
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+              <div className="space-y-4 md:space-y-6">
+                <h3 className="text-base md:text-lg font-medium">Appointment Details</h3>
+                <div className="grid grid-cols-1 gap-4 md:gap-6 md:grid-cols-2">
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
                       <Label htmlFor="collectionType">Collection Method</Label>
@@ -322,9 +322,9 @@ export function TestBookingModal({
 
             {/* Step 3: Confirmation */}
             {currentStep === 3 && (
-              <div className="space-y-6">
-                <h3 className="text-lg font-medium">Review & Confirm</h3>
-                <div className="bg-muted/30 p-6 rounded-xl border space-y-4 text-sm">
+              <div className="space-y-4 md:space-y-6">
+                <h3 className="text-base md:text-lg font-medium">Review & Confirm</h3>
+                <div className="bg-muted/30 p-4 md:p-6 rounded-xl border space-y-3 md:space-y-4 text-xs md:text-sm">
                   <div className="flex justify-between border-b pb-2">
                     <span className="text-muted-foreground">Patient:</span>
                     <span className="font-medium">{formData.fullName}</span>

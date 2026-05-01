@@ -66,18 +66,18 @@ export default function BookTestModal({ isOpen, onClose }: BookTestModalProps) {
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.95, opacity: 0, y: 20 }}
             transition={{ type: "spring", damping: 30, stiffness: 400 }}
-            className="relative w-full max-w-lg overflow-hidden rounded-[2.5rem] bg-white shadow-[0_32px_64px_-16px_rgba(0,0,0,0.2)] border border-gray-100 p-10"
+            className="relative w-full max-w-lg overflow-hidden rounded-[2.5rem] bg-white shadow-[0_32px_64px_-16px_rgba(0,0,0,0.2)] border border-gray-100 p-6 md:p-10"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="flex items-start justify-between mb-8">
+            <div className="flex items-start justify-between mb-6 md:mb-8">
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
                   <span className="text-[10px] font-bold uppercase tracking-widest text-primary">Direct Booking</span>
                 </div>
-                <h2 className="text-4xl font-display text-dark tracking-tight">Book a Test</h2>
-                <p className="text-secondary mt-2">Schedule your diagnostic with Pune's most trusted laboratory.</p>
+                <h2 className="text-2xl md:text-4xl font-display text-dark tracking-tight">Book a Test</h2>
+                <p className="text-secondary mt-1 text-sm md:text-base md:mt-2">Schedule your diagnostic with Pune's most trusted laboratory.</p>
               </div>
               <button
                 onClick={onClose}
@@ -87,7 +87,7 @@ export default function BookTestModal({ isOpen, onClose }: BookTestModalProps) {
               </button>
             </div>
 
-            <form className="space-y-6" onSubmit={handleSubmit}>
+            <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
               {/* Full Name */}
               <div className="space-y-2">
                 <label className="text-sm font-bold text-dark ml-1">Full Name</label>
@@ -97,7 +97,7 @@ export default function BookTestModal({ isOpen, onClose }: BookTestModalProps) {
                     name="fullName"
                     type="text" 
                     placeholder="Enter your full name"
-                    className="w-full pl-12 pr-4 py-4 rounded-2xl bg-gray-soft border border-gray-100 focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10 outline-none transition-all placeholder:text-gray-400 text-dark font-medium"
+                    className="w-full pl-12 pr-4 py-3 md:py-4 rounded-2xl bg-gray-soft border border-gray-100 focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10 outline-none transition-all placeholder:text-gray-400 text-dark font-medium"
                     required
                   />
                 </div>
@@ -112,7 +112,7 @@ export default function BookTestModal({ isOpen, onClose }: BookTestModalProps) {
                     name="email"
                     type="email" 
                     placeholder="name@example.com"
-                    className="w-full pl-12 pr-4 py-4 rounded-2xl bg-gray-soft border border-gray-100 focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10 outline-none transition-all placeholder:text-gray-400 text-dark font-medium"
+                    className="w-full pl-12 pr-4 py-3 md:py-4 rounded-2xl bg-gray-soft border border-gray-100 focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10 outline-none transition-all placeholder:text-gray-400 text-dark font-medium"
                     required
                   />
                 </div>
@@ -132,13 +132,13 @@ export default function BookTestModal({ isOpen, onClose }: BookTestModalProps) {
                     onInput={(e) => {
                       e.currentTarget.value = e.currentTarget.value.replace(/[^0-9]/g, '').slice(0, 10);
                     }}
-                    className="w-full pl-12 pr-4 py-4 rounded-2xl bg-gray-soft border border-gray-100 focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10 outline-none transition-all placeholder:text-gray-400 text-dark font-medium"
+                    className="w-full pl-12 pr-4 py-3 md:py-4 rounded-2xl bg-gray-soft border border-gray-100 focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10 outline-none transition-all placeholder:text-gray-400 text-dark font-medium"
                     required
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                 {/* Select Test */}
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-dark ml-1">Test Type</label>
@@ -147,7 +147,7 @@ export default function BookTestModal({ isOpen, onClose }: BookTestModalProps) {
                     <select 
                       name="testType"
                       defaultValue="" 
-                      className="w-full pl-12 pr-10 py-4 rounded-2xl bg-gray-soft border border-gray-100 focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10 outline-none transition-all text-dark font-medium appearance-none cursor-pointer"
+                      className="w-full pl-12 pr-10 py-3 md:py-4 rounded-2xl bg-gray-soft border border-gray-100 focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10 outline-none transition-all text-dark font-medium appearance-none cursor-pointer"
                       required
                     >
                       <option value="" disabled>Select test...</option>
@@ -171,22 +171,22 @@ export default function BookTestModal({ isOpen, onClose }: BookTestModalProps) {
                     <input 
                       name="preferredDate"
                       type="date" 
-                      className="w-full pl-12 pr-4 py-4 rounded-2xl bg-gray-soft border border-gray-100 focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10 outline-none transition-all text-dark font-medium cursor-pointer"
+                      className="w-full pl-12 pr-4 py-3 md:py-4 rounded-2xl bg-gray-soft border border-gray-100 focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10 outline-none transition-all text-dark font-medium cursor-pointer"
                       required
                     />
                   </div>
                 </div>
               </div>
 
-              <div className="pt-4">
+              <div className="pt-2 md:pt-4">
                 <button 
                   disabled={isSubmitting || isSuccess}
                   type="submit"
-                  className="w-full bg-primary hover:bg-primary-hover text-white py-5 rounded-2xl font-bold text-lg shadow-xl shadow-primary/30 transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed"
+                  className="w-full bg-primary hover:bg-primary-hover text-white py-4 md:py-5 rounded-2xl font-bold text-lg shadow-xl shadow-primary/30 transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed"
                 >
                   {isSuccess ? "Success!" : isSubmitting ? "Processing..." : "Schedule Appointment"}
                 </button>
-                <div className="flex items-center justify-center gap-2 mt-6 text-gray-400 text-xs font-semibold uppercase tracking-wider">
+                <div className="flex items-center justify-center gap-2 mt-4 md:mt-6 text-gray-400 text-[10px] md:text-xs font-semibold uppercase tracking-wider">
                   <ShieldCheck size={14} className="text-green-500" />
                   Secure & Confidential Testing
                 </div>

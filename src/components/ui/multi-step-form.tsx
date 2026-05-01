@@ -69,26 +69,26 @@ const MultiStepForm = React.forwardRef<HTMLDivElement, MultiStepFormProps>(
     return (
       <Card ref={ref} className={cn(multiStepFormVariants({ size }), className)} {...props}>
         {!hideHeader && (
-          <CardHeader>
+          <CardHeader className="p-4 md:p-6">
             <div className="flex items-start justify-between">
-              <CardTitle>{title}</CardTitle>
+              <CardTitle className="text-xl md:text-2xl">{title}</CardTitle>
               {onClose && (
-                <Button variant="ghost" size="icon" onClick={onClose} aria-label="Close">
+                <Button variant="ghost" size="icon" onClick={onClose} aria-label="Close" className="h-8 w-8">
                   <X className="h-4 w-4" />
                 </Button>
               )}
             </div>
-            <CardDescription>{description}</CardDescription>
+            <CardDescription className="text-xs md:text-sm">{description}</CardDescription>
             <div className="flex items-center gap-4 pt-2">
-              <Progress value={progress} className="w-full" />
-              <p className="text-sm text-muted-foreground whitespace-nowrap">
+              <Progress value={progress} className="w-full h-1.5" />
+              <p className="text-[10px] md:text-sm text-muted-foreground whitespace-nowrap">
                 {currentStep}/{totalSteps} completed
               </p>
             </div>
           </CardHeader>
         )}
 
-        <CardContent className={cn("min-h-[300px] overflow-hidden", hideHeader && "pt-6")}>
+        <CardContent className={cn("min-h-[200px] md:min-h-[300px] overflow-hidden p-4 md:p-6 pt-0", hideHeader && "pt-4 md:pt-6")}>
           <AnimatePresence mode="wait">
             <motion.div
               key={currentStep}
@@ -104,15 +104,15 @@ const MultiStepForm = React.forwardRef<HTMLDivElement, MultiStepFormProps>(
         </CardContent>
 
         {!hideFooter && (
-          <CardFooter className="flex justify-between">
+          <CardFooter className="flex justify-between p-4 md:p-6 pt-0">
             <div>{footerContent}</div>
             <div className="flex gap-2">
               {currentStep > 1 && (
-                <Button variant="outline" onClick={onBack}>
+                <Button variant="outline" size="sm" className="md:size-default" onClick={onBack}>
                   {backButtonText}
                 </Button>
               )}
-              <Button onClick={onNext}>
+              <Button size="sm" className="md:size-default" onClick={onNext}>
                 {nextButtonText}
               </Button>
             </div>
