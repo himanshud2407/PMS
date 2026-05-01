@@ -36,7 +36,10 @@ export default function Hero() {
     document.body.style.backgroundColor = "black";
 
     const frameCount = 240;
-    const criticalFrameCount = 40; // Number of frames needed to start the experience
+    const skipFactor = 2; // Only load every 2nd frame for 2x faster loading
+    const totalToLoad = Math.floor(frameCount / skipFactor);
+    const criticalFrameCount = 10; // Start the site much sooner (was 40)
+    
     const currentFrame = (index: number) =>
       `/images/ezgif-frame-${(index + 1).toString().padStart(3, "0")}.png`;
 
@@ -47,16 +50,21 @@ export default function Hero() {
 
     let loadedCount = 0;
     
-    // Prioritize loading first few frames
+    // Prioritize loading frames with skipping
     const preloadImages = async () => {
-      for (let i = 0; i < frameCount; i++) {
+      // Load first frame immediately for instant visual
+      const firstImg = new Image();
+      firstImg.src = currentFrame(0);
+      images[0] = firstImg;
+      
+      for (let i = 0; i < frameCount; i += skipFactor) {
         const img = new Image();
         img.src = currentFrame(i);
-        images.push(img);
+        images[i] = img;
         
         img.onload = () => {
           loadedCount++;
-          setLoadingProgress(Math.round((loadedCount / frameCount) * 100));
+          setLoadingProgress(Math.round((loadedCount / totalToLoad) * 100));
           
           if (loadedCount === 1) {
             render();
@@ -78,10 +86,13 @@ export default function Hero() {
         Math.max(0, Math.round(airpods.frame)),
       );
 
-      // Only redraw if the frame has actually changed or if forced (e.g. on resize)
-      if (!force && frameIndex === lastFrameIndex) return;
+      // Find the nearest loaded frame index based on skipFactor
+      const nearestLoadedIndex = Math.floor(frameIndex / skipFactor) * skipFactor;
 
-      const img = images[frameIndex];
+      // Only redraw if the frame has actually changed or if forced (e.g. on resize)
+      if (!force && nearestLoadedIndex === lastFrameIndex) return;
+
+      const img = images[nearestLoadedIndex];
       if (img && img.complete) {
         // Clear canvas before drawing
         context.clearRect(0, 0, canvas.width, canvas.height);
@@ -95,7 +106,7 @@ export default function Hero() {
         const y = canvas.height / 2 - (img.height / 2) * scale;
         context.drawImage(img, x, y, img.width * scale, img.height * scale);
 
-        lastFrameIndex = frameIndex;
+        lastFrameIndex = nearestLoadedIndex;
       }
     };
 
