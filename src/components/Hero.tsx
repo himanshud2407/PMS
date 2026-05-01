@@ -1,8 +1,9 @@
+"use client";
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Button from "./ui/button-style";
+import LearnMoreButton from "./ui/LearnMoreButton";
 import BookTestModal from "./BookTestModal";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -21,6 +22,8 @@ export default function Hero() {
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const [criticalLoaded, setCriticalLoaded] = useState(false);
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -33,6 +36,7 @@ export default function Hero() {
     document.body.style.backgroundColor = "black";
 
     const frameCount = 240;
+    const criticalFrameCount = 40; // Number of frames needed to start the experience
     const currentFrame = (index: number) =>
       `/images/ezgif-frame-${(index + 1).toString().padStart(3, "0")}.png`;
 
@@ -42,19 +46,30 @@ export default function Hero() {
     };
 
     let loadedCount = 0;
-    for (let i = 0; i < frameCount; i++) {
-      const img = new Image();
-      img.onload = () => {
-        loadedCount++;
-        setLoadingProgress(Math.round((loadedCount / frameCount) * 100));
-        if (loadedCount === 1) {
-          // Draw first frame immediately when it's loaded
-          render();
-        }
-      };
-      img.src = currentFrame(i);
-      images.push(img);
-    }
+    
+    // Prioritize loading first few frames
+    const preloadImages = async () => {
+      for (let i = 0; i < frameCount; i++) {
+        const img = new Image();
+        img.src = currentFrame(i);
+        images.push(img);
+        
+        img.onload = () => {
+          loadedCount++;
+          setLoadingProgress(Math.round((loadedCount / frameCount) * 100));
+          
+          if (loadedCount === 1) {
+            render();
+          }
+          
+          if (loadedCount >= criticalFrameCount && !criticalLoaded) {
+            setCriticalLoaded(true);
+          }
+        };
+      }
+    };
+
+    preloadImages();
 
     let lastFrameIndex = -1;
     const render = (force = false) => {
@@ -98,8 +113,8 @@ export default function Hero() {
     // Initial render attempt in case of fast caching
     render();
 
-    // Entry animations for UI elements (triggered when loading completes)
-    if (loadingProgress === 100) {
+    // Entry animations for UI elements (triggered when critical loading completes)
+    if (criticalLoaded) {
       const introTl = gsap.timeline();
       
       if (introRef.current) {
@@ -204,17 +219,19 @@ export default function Hero() {
       // Restore original background if needed
       document.body.style.backgroundColor = originalBg;
     };
-  }, [loadingProgress]);
+  }, [criticalLoaded]);
 
   return (
     <section
-      id="home"
+      id="hero"
       ref={containerRef}
       className="relative bg-black text-white overflow-hidden h-screen h-[100dvh] w-full"
     >
       <div className="absolute inset-0 w-full h-full z-0 flex items-center justify-center bg-black">
         <canvas
           ref={canvasRef}
+          aria-label="Cinematic diagnostic animation"
+          role="img"
           className="absolute inset-0 w-full h-full object-cover z-0 will-change-transform"
           style={{ imageRendering: "auto" }}
         />
@@ -224,7 +241,7 @@ export default function Hero() {
       </div>
 
       <div
-        className={`relative z-20 w-full h-full max-w-7xl mx-auto px-6 lg:px-12 pointer-events-none transition-opacity duration-500 ${loadingProgress < 100 ? "opacity-0" : "opacity-100"}`}
+        className={`relative z-20 w-full h-full max-w-7xl mx-auto px-6 lg:px-12 pointer-events-none transition-opacity duration-500 ${!criticalLoaded ? "opacity-0" : "opacity-100"}`}
       >
         {/* Intro */}
         <div
@@ -232,7 +249,7 @@ export default function Hero() {
           className="absolute top-[40%] md:top-1/2 -translate-y-1/2 left-6 lg:left-12 right-6 md:right-auto max-w-3xl"
         >
           <h1 className="text-3xl md:text-7xl font-display font-medium leading-[1.2] md:leading-[1.1] mb-3 md:mb-6 drop-shadow-[0_4px_20px_rgba(0,0,0,0.8)]">
-            Best <span className="text-blue-400 italic">Pathology Lab</span> <br className="hidden md:block" />
+            Best <span className="text-primary italic">Pathology Lab</span> <br className="hidden md:block" />
             in Pune for <br />
             Better Health
           </h1>
@@ -249,28 +266,28 @@ export default function Hero() {
               <div className="text-2xl md:text-4xl font-bold text-white mb-0 md:mb-1 drop-shadow-md">
                 99.9%
               </div>
-              <div className="text-[9px] md:text-xs text-blue-400 uppercase tracking-[0.2em] font-bold opacity-80 group-hover:opacity-100 transition-opacity">
+              <div className="text-[9px] md:text-xs text-primary uppercase tracking-[0.2em] font-bold opacity-80 group-hover:opacity-100 transition-opacity">
                 Precision Rate
               </div>
-              <div className="absolute -left-3 md:-left-4 top-0 w-1 h-full bg-gradient-to-b from-blue-500 to-transparent rounded-full opacity-50"></div>
+              <div className="absolute -left-3 md:-left-4 top-0 w-1 h-full bg-gradient-to-b from-primary to-transparent rounded-full opacity-50"></div>
             </div>
             <div className="relative group">
               <div className="text-2xl md:text-4xl font-bold text-white mb-0 md:mb-1 drop-shadow-md">
                 24/7
               </div>
-              <div className="text-[9px] md:text-xs text-blue-400 uppercase tracking-[0.2em] font-bold opacity-80 group-hover:opacity-100 transition-opacity">
+              <div className="text-[9px] md:text-xs text-primary uppercase tracking-[0.2em] font-bold opacity-80 group-hover:opacity-100 transition-opacity">
                 Expert Care
               </div>
-              <div className="absolute -left-3 md:-left-4 top-0 w-1 h-full bg-gradient-to-b from-cyan-500 to-transparent rounded-full opacity-50"></div>
+              <div className="absolute -left-3 md:-left-4 top-0 w-1 h-full bg-gradient-to-b from-primary to-transparent rounded-full opacity-50"></div>
             </div>
             <div className="relative group">
               <div className="text-2xl md:text-4xl font-bold text-white mb-0 md:mb-1 drop-shadow-md">
                 10k+
               </div>
-              <div className="text-[9px] md:text-xs text-blue-400 uppercase tracking-[0.2em] font-bold opacity-80 group-hover:opacity-100 transition-opacity">
+              <div className="text-[9px] md:text-xs text-primary uppercase tracking-[0.2em] font-bold opacity-80 group-hover:opacity-100 transition-opacity">
                 Happy Lives
               </div>
-              <div className="absolute -left-3 md:-left-4 top-0 w-1 h-full bg-gradient-to-b from-emerald-500 to-transparent rounded-full opacity-50"></div>
+              <div className="absolute -left-3 md:-left-4 top-0 w-1 h-full bg-gradient-to-b from-primary to-transparent rounded-full opacity-50"></div>
             </div>
           </div>
         </div>
@@ -282,13 +299,13 @@ export default function Hero() {
         >
           <h2 className="text-3xl md:text-6xl font-display font-medium mb-4 md:mb-6 drop-shadow-[0_4px_20px_rgba(0,0,0,0.8)]">
             Beyond Boundaries <br />
-            <span className="text-cyan-400 drop-shadow-[0_0_20px_rgba(34,211,238,0.4)]">
+            <span className="text-primary drop-shadow-[0_0_20px_rgba(89,175,181,0.4)]">
               Discover More
             </span>
           </h2>
           <div className="flex flex-col gap-6 items-end">
             <div className="bg-white/5 backdrop-blur-xl p-6 md:p-8 rounded-3xl border border-white/10 shadow-2xl relative overflow-hidden group">
-              <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
               <div className="text-4xl md:text-5xl font-bold mb-2 text-white drop-shadow-md">
                 24/7
               </div>
@@ -306,7 +323,7 @@ export default function Hero() {
         >
           <h2 className="text-3xl md:text-6xl font-display font-medium mb-4 md:mb-6 drop-shadow-[0_4px_20px_rgba(0,0,0,0.8)]">
             Unparalleled <br />
-            <span className="text-emerald-400 drop-shadow-[0_0_20px_rgba(52,211,153,0.4)]">
+            <span className="text-primary drop-shadow-[0_0_20px_rgba(89,175,181,0.4)]">
               Accuracy
             </span>
           </h2>
@@ -323,12 +340,12 @@ export default function Hero() {
         >
           <h2 className="text-4xl md:text-7xl font-display font-medium mb-6 md:mb-8 drop-shadow-[0_4px_20_rgba(0,0,0,0.8)]">
             Every Cell Tells <br />
-            <span className="text-primary italic drop-shadow-[0_0_30px_rgba(37,99,235,0.6)]">
+            <span className="text-primary italic drop-shadow-[0_0_30px_rgba(89,175,181,0.6)]">
               A Story
             </span>
           </h2>
           <div className="pointer-events-auto flex justify-center">
-            <Button onClick={() => setIsModalOpen(true)} />
+            <LearnMoreButton onClick={() => setIsModalOpen(true)} text="Book an Appointment" />
           </div>
         </div>
       </div>
@@ -336,7 +353,7 @@ export default function Hero() {
 
       {/* Global Loader - Placed last to naturally layer on top */}
       <AnimatePresence>
-        {loadingProgress < 100 && (
+        {!criticalLoaded && (
           <motion.div
             initial={{ opacity: 1 }}
             exit={{ opacity: 0, scale: 1.05, filter: "blur(20px)" }}
@@ -353,10 +370,10 @@ export default function Hero() {
                   <img 
                     src="/nav-logo.png" 
                     alt="Dr. Baviskar Logo" 
-                    className="h-14 md:h-16 w-auto object-contain drop-shadow-[0_0_15px_rgba(59,130,246,0.5)]"
+                    className="h-14 md:h-16 w-auto object-contain drop-shadow-[0_0_15px_rgba(89,175,181,0.5)]"
                   />
                 </motion.div>
-                <p className="text-blue-400 text-xs tracking-[0.3em] uppercase font-bold animate-pulse">
+                <p className="text-primary text-xs tracking-[0.3em] uppercase font-bold animate-pulse">
                   {loadingProgress < 40
                     ? "Calibrating Medical Systems"
                     : loadingProgress < 80
@@ -367,7 +384,7 @@ export default function Hero() {
 
               <div className="relative h-1 w-full bg-white/10 rounded-full overflow-hidden backdrop-blur-sm">
                 <motion.div
-                  className="absolute inset-y-0 left-0 bg-gradient-to-r from-blue-600 via-blue-400 to-cyan-400 shadow-[0_0_15px_rgba(59,130,246,0.6)]"
+                  className="absolute inset-y-0 left-0 bg-gradient-to-r from-primary via-primary-hover to-primary shadow-[0_0_15px_rgba(89,175,181,0.6)]"
                   initial={{ width: "0%" }}
                   animate={{ width: `${loadingProgress}%` }}
                   transition={{ type: "spring", bounce: 0, duration: 0.5 }}
@@ -381,7 +398,7 @@ export default function Hero() {
                   </span>
                   <span className="text-4xl font-display font-bold text-white tabular-nums">
                     {loadingProgress}
-                    <span className="text-blue-500 text-xl">%</span>
+                    <span className="text-primary text-xl">%</span>
                   </span>
                 </div>
                 <div className="text-right text-[10px] text-white/30 uppercase tracking-widest font-medium pb-1">

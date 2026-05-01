@@ -3,7 +3,7 @@
 import * as React from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { X } from "lucide-react";
-import { cn } from "@/src/lib/utils";
+import { cn } from "../../lib/utils";
 
 interface ExpandableCardProps {
   title: string;

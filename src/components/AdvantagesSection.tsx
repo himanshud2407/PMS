@@ -1,15 +1,64 @@
+"use client";
 import { motion, AnimatePresence } from 'motion/react';
-import { Heart, Activity, Smile, Leaf, ChevronDown, ChevronUp } from 'lucide-react';
+import { 
+  Heart, 
+  Activity, 
+  Smile, 
+  Leaf, 
+  ChevronDown, 
+  ChevronUp, 
+  FlaskConical, 
+  Microscope, 
+  ShieldCheck,
+  Droplet,
+  Droplets,
+  Bug,
+  Flame,
+  Beaker,
+  ClipboardList,
+  Dna,
+  Clock,
+  TestTube,
+  ShieldPlus,
+  FlaskRound,
+  ShieldAlert,
+  Thermometer,
+  Stethoscope,
+  TestTubes,
+  Baby,
+  HeartPulse
+} from 'lucide-react';
 import ButtonWithIcon from './ui/button-with-icon';
 import { useState } from 'react';
 import { DIAGNOSTIC_TESTS } from '../constants';
 import BookTestModal from './BookTestModal';
+import Link from 'next/link';
 
 const iconMap: Record<string, any> = {
   Heart,
   Activity,
   Smile,
-  Leaf
+  Leaf,
+  FlaskConical,
+  Microscope,
+  ShieldCheck,
+  Droplet,
+  Droplets,
+  Bug,
+  Flame,
+  Beaker,
+  ClipboardList,
+  Dna,
+  Clock,
+  TestTube,
+  ShieldPlus,
+  FlaskRound,
+  ShieldAlert,
+  Thermometer,
+  Stethoscope,
+  TestTubes,
+  Baby,
+  HeartPulse
 };
 
 export default function AdvantagesSection() {
@@ -32,7 +81,7 @@ export default function AdvantagesSection() {
           <ButtonWithIcon 
             label="Appointment" 
             onClick={() => setIsModalOpen(true)}
-            className="w-full md:w-auto bg-primary text-white shadow-xl shadow-primary/20"
+            className="w-auto md:w-auto bg-primary text-white shadow-xl shadow-primary/20"
           />
         </div>
 
@@ -40,23 +89,23 @@ export default function AdvantagesSection() {
           {/* Bento Card 1: 95% Chart */}
           <motion.div 
             whileHover={{ y: -5 }}
-            className="bg-gray-soft rounded-[2.5rem] p-8 col-span-1 border border-transparent hover:border-blue-100 transition-colors shadow-sm hover:shadow-xl hover:shadow-blue-500/5 group/card relative overflow-hidden"
+            className="bg-gray-soft rounded-[2.5rem] p-8 col-span-1 border border-transparent hover:border-primary/20 transition-colors shadow-sm hover:shadow-xl hover:shadow-primary/5 group/card relative overflow-hidden"
           >
             {/* Background Grid Lines */}
             <div className="absolute inset-x-8 top-8 h-40 flex flex-col justify-between pointer-events-none opacity-20">
               {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="w-full h-px bg-blue-300"></div>
+                <div key={i} className="w-full h-px bg-primary/20"></div>
               ))}
             </div>
 
             <div className="flex gap-1.5 h-40 mb-6 items-end relative z-10">
               {[40, 65, 45, 80, 55, 90, 75, 85, 60, 95, 70, 80].map((h, i) => (
-                <div key={i} className="flex-1 bg-blue-100/40 rounded-t-md relative group h-full">
+                <div key={i} className="flex-1 bg-primary/10 rounded-t-md relative group h-full">
                   <motion.div 
                     initial={{ height: 0 }}
                     whileInView={{ height: `${h}%` }}
                     transition={{ type: "spring", stiffness: 100, damping: 15, delay: i * 0.04 }}
-                    className="absolute bottom-0 w-full bg-gradient-to-t from-primary via-blue-500 to-blue-400 rounded-t-md transition-all group-hover:brightness-110"
+                    className="absolute bottom-0 w-full bg-gradient-to-t from-primary via-primary-hover to-primary/60 rounded-t-md transition-all group-hover:brightness-110"
                   >
                     <div className="absolute -top-7 left-1/2 -translate-x-1/2 bg-dark text-white text-[9px] px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none font-bold">
                       {h}%
@@ -74,14 +123,14 @@ export default function AdvantagesSection() {
           {/* Bento Card 2: 82% Circle */}
           <motion.div 
             whileHover={{ y: -5 }}
-            className="bg-gray-soft rounded-[2.5rem] p-8 flex flex-col items-center justify-center relative overflow-hidden border border-transparent hover:border-blue-100 transition-colors shadow-sm hover:shadow-xl hover:shadow-blue-500/5 group/card"
+            className="bg-gray-soft rounded-[2.5rem] p-8 flex flex-col items-center justify-center relative overflow-hidden border border-transparent hover:border-primary/20 transition-colors shadow-sm hover:shadow-xl hover:shadow-primary/5 group/card"
           >
             <div className="relative w-48 h-48 flex items-center justify-center">
               <svg className="w-full h-full -rotate-90 drop-shadow-[0_0_8px_rgba(29,104,242,0.2)]">
                 <defs>
                   <linearGradient id="circleGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#1D68F2" />
-                    <stop offset="100%" stopColor="#60A5FA" />
+                    <stop offset="0%" stopColor="#59AFB5" />
+                    <stop offset="100%" stopColor="#6abcc3" />
                   </linearGradient>
                 </defs>
                 <circle cx="96" cy="96" r="80" fill="none" stroke="#eef2ff" strokeWidth="6" />
@@ -125,7 +174,7 @@ export default function AdvantagesSection() {
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
               className="absolute bottom-10 left-6 bg-white shadow-lg p-2.5 rounded-2xl"
             >
-              <Leaf size={18} className="text-emerald-500" />
+              <Leaf size={18} className="text-primary" />
             </motion.div>
             
             <motion.div 
@@ -133,14 +182,14 @@ export default function AdvantagesSection() {
               transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
               className="absolute top-12 left-10 bg-white shadow-lg p-2.5 rounded-2xl"
             >
-              <Activity size={18} className="text-cyan-500" />
+              <Activity size={18} className="text-primary" />
             </motion.div>
           </motion.div>
 
           {/* Bento Card 3: Line Chart */}
           <motion.div 
             whileHover={{ y: -5 }}
-            className="bg-gray-soft rounded-[2.5rem] p-8 border border-transparent hover:border-blue-100 transition-colors shadow-sm hover:shadow-xl hover:shadow-blue-500/5 group/card"
+            className="bg-gray-soft rounded-[2.5rem] p-8 border border-transparent hover:border-primary/20 transition-colors shadow-sm hover:shadow-xl hover:shadow-primary/5 group/card"
           >
             <div className="flex justify-between items-start mb-6">
               <div>
@@ -154,8 +203,8 @@ export default function AdvantagesSection() {
               <svg className="w-full h-full overflow-visible" viewBox="0 0 300 100" preserveAspectRatio="none">
                 <defs>
                   <linearGradient id="lineGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="#1D68F2" stopOpacity="0.2" />
-                    <stop offset="100%" stopColor="#1D68F2" stopOpacity="0" />
+                    <stop offset="0%" stopColor="#59AFB5" stopOpacity="0.2" />
+                    <stop offset="100%" stopColor="#59AFB5" stopOpacity="0" />
                   </linearGradient>
                 </defs>
                 
@@ -171,7 +220,7 @@ export default function AdvantagesSection() {
                 <motion.path
                   d="M0 100 Q 50 110, 100 80 T 200 40 T 300 10"
                   fill="none"
-                  stroke="#1D68F2"
+                  stroke="#59AFB5"
                   strokeWidth="3"
                   strokeLinecap="round"
                   initial={{ pathLength: 0 }}
@@ -185,8 +234,8 @@ export default function AdvantagesSection() {
                   whileInView={{ opacity: 1 }}
                   transition={{ delay: 2 }}
                 >
-                  <circle cx="300" cy="10" r="10" fill="#1D68F2" className="opacity-20 animate-ping" />
-                  <circle cx="300" cy="10" r="4" fill="#1D68F2" className="shadow-lg" />
+                  <circle cx="300" cy="10" r="10" fill="#59AFB5" className="opacity-20 animate-ping" />
+                  <circle cx="300" cy="10" r="4" fill="#59AFB5" className="shadow-lg" />
                 </motion.g>
               </svg>
               <div className="absolute -top-2 right-0 bg-dark text-white text-[10px] px-2 py-1 rounded-full font-bold shadow-lg transform translate-y-[-100%]">
@@ -198,7 +247,7 @@ export default function AdvantagesSection() {
           {/* Bento Card 4: Shop Promo */}
           <motion.div 
             whileHover={{ y: -5 }}
-            className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-[2.5rem] p-5 flex gap-5 items-center relative overflow-hidden group/card shadow-xl shadow-blue-500/20"
+            className="bg-gradient-to-br from-primary to-primary-hover rounded-[2.5rem] p-5 flex gap-5 items-center relative overflow-hidden group/card shadow-xl shadow-primary/20"
           >
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.15),transparent)] pointer-events-none"></div>
             
@@ -217,7 +266,7 @@ export default function AdvantagesSection() {
               <h4 className="text-white font-display font-bold text-xl leading-tight mb-4 drop-shadow-sm">
                 Check out <br/> our multivitamins
               </h4>
-              <button className="bg-white text-blue-600 px-6 py-2.5 rounded-full text-sm font-bold shadow-md hover:shadow-lg transition-all active:scale-95">
+              <button className="bg-white text-primary px-6 py-2.5 rounded-full text-sm font-bold shadow-md hover:shadow-lg transition-all active:scale-95">
                 Shop Now
               </button>
 
@@ -282,17 +331,17 @@ export default function AdvantagesSection() {
                   <div className="absolute inset-0 bg-gradient-to-br from-primary/0 to-primary/0 group-hover:from-primary/5 group-hover:to-transparent transition-all duration-500"></div>
 
                   <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-transform relative z-10 ${
-                    test.color === 'blue' ? 'bg-blue-50 text-blue-500' :
-                    test.color === 'emerald' ? 'bg-emerald-50 text-emerald-500' :
-                    test.color === 'cyan' ? 'bg-cyan-50 text-cyan-500' :
+                    test.color === 'blue' ? 'bg-primary/10 text-primary' :
+                    test.color === 'emerald' ? 'bg-primary/10 text-primary' :
+                    test.color === 'cyan' ? 'bg-primary/10 text-primary' :
                     test.color === 'rose' ? 'bg-rose-50 text-rose-500' :
-                    test.color === 'indigo' ? 'bg-indigo-50 text-indigo-500' :
+                    test.color === 'indigo' ? 'bg-primary/10 text-primary' :
                     test.color === 'amber' ? 'bg-amber-50 text-amber-500' :
                     test.color === 'purple' ? 'bg-purple-50 text-purple-500' :
                     test.color === 'red' ? 'bg-red-50 text-red-500' :
                     test.color === 'orange' ? 'bg-orange-50 text-orange-500' :
-                    test.color === 'teal' ? 'bg-teal-50 text-teal-500' :
-                    'bg-blue-50 text-blue-500'
+                    test.color === 'teal' ? 'bg-primary/10 text-primary' :
+                    'bg-primary/10 text-primary'
                   }`}>
                     <Icon size={28} />
                   </div>
@@ -323,22 +372,15 @@ export default function AdvantagesSection() {
         </motion.div>
 
         <div className="flex justify-center mt-16">
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => setShowAllTests(!showAllTests)}
-            className="flex items-center gap-3 bg-dark text-white px-8 py-4 rounded-full font-bold shadow-xl shadow-dark/20 hover:bg-primary transition-all group"
-          >
-            {showAllTests ? (
-              <>
-                Show Less <ChevronUp className="group-hover:-translate-y-1 transition-transform" />
-              </>
-            ) : (
-              <>
-                View More Tests <ChevronDown className="group-hover:translate-y-1 transition-transform" />
-              </>
-            )}
-          </motion.button>
+          <Link href="/tests">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="flex items-center gap-3 bg-dark text-white px-8 py-4 rounded-full font-bold shadow-xl shadow-dark/20 hover:bg-primary transition-all group"
+            >
+              View All Tests in Directory <ChevronDown className="group-hover:translate-y-1 transition-transform" />
+            </motion.button>
+          </Link>
         </div>
       </div>
       <BookTestModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />

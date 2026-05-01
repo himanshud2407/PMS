@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
@@ -16,7 +18,7 @@ import {
   CheckCircle2,
   ArrowRight
 } from 'lucide-react';
-import { cn } from '@/src/lib/utils';
+import { cn } from '@/lib/utils';
 import ButtonWithIcon from './ui/button-with-icon';
 import BookTestModal from './BookTestModal';
 
@@ -44,8 +46,8 @@ export default function Footer() {
     ],
     Support: [
       { name: 'Contact Us', href: 'mailto:info@drbaviskar.com' },
-      { name: 'Privacy Policy', href: '#faq' },
-      { name: 'Terms of Service', href: '#faq' }
+      { name: 'Privacy Policy', href: '/privacy-policy' },
+      { name: 'Terms of Service', href: '/terms-of-service' }
     ]
   };
 
@@ -57,7 +59,7 @@ export default function Footer() {
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="relative rounded-[3rem] overflow-hidden bg-gradient-to-br from-[#E6F0FF] via-[#F5F9FF] to-[#FFFFFF] p-12 md:p-20 text-center border border-blue-50 shadow-sm"
+          className="relative rounded-[3rem] overflow-hidden bg-gradient-to-br from-[#f2f9f9] via-[#e0f2f3] to-[#FFFFFF] p-12 md:p-20 text-center border border-primary/10 shadow-sm"
         >
           {/* Logo Icon */}
           <div className="flex justify-center mb-8">
@@ -78,7 +80,7 @@ export default function Footer() {
                 </svg>
               </div>
             </div> */}
-            <img src="/nav-logo.png" alt="Logo" className="scale-50" />
+            <img src="/nav-logo.png" alt="Dr. Baviskar Pathology Lab Logo" className="scale-50" />
           </div>
 
           <h2 className="text-4xl md:text-6xl font-display font-bold text-gray-900 mb-8 tracking-tight">
@@ -96,7 +98,7 @@ export default function Footer() {
                 key={feature}
                 className="flex items-center gap-2 text-sm font-medium text-gray-600"
               >
-                <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+                <CheckCircle2 className="w-5 h-5 text-primary" />
                 <span>{feature}</span>
               </div>
             ))}
@@ -121,7 +123,7 @@ export default function Footer() {
         {/* Brand & Contact */}
         <div className="lg:col-span-2 space-y-8">
           <div className="flex items-center gap-2">
-            <img src="/nav-logo.png" alt="Logo" className="h-10 rounded-xl" />
+            <img src="/nav-logo.png" alt="Dr. Baviskar Pathology Lab Logo" className="h-10 rounded-xl" />
           </div>
 
           <div className="space-y-4 text-sm text-gray-500 font-medium">
@@ -194,14 +196,11 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto mt-24 pt-8 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-gray-400">
         <p>© 2026 Dr. Baviskar Pathology Lab. All rights reserved.</p>
         <div className="flex gap-6">
-          <a href="#" className="hover:text-primary transition-colors">
+          <a href="/privacy-policy" className="hover:text-primary transition-colors">
             Privacy Policy
           </a>
-          <a href="#" className="hover:text-primary transition-colors">
+          <a href="/terms-of-service" className="hover:text-primary transition-colors">
             Terms of Service
-          </a>
-          <a href="#" className="hover:text-primary transition-colors">
-            Cookie Settings
           </a>
         </div>
       </div>

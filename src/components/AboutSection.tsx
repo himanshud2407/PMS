@@ -3,14 +3,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+"use client";
+
 import { motion } from 'motion/react';
 import OrbitingSkills from './ui/orbiting-skills';
 import ButtonWithIcon from './ui/button-with-icon';
+import Link from 'next/link';
 
 
 export default function AboutSection() {
   return (
-    <section id="about" className="px-4 lg:px-12 py-24 bg-white overflow-hidden">
+    <section id="home" className="px-4 lg:px-12 py-24 bg-white relative">
       <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 lg:gap-20 items-center">
         <div>
           <span className="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-4 block">About Us</span>
@@ -18,10 +21,12 @@ export default function AboutSection() {
             Providing Advanced Care with Modern Equipment
           </h2>
           <p className="text-gray-500 text-base md:text-lg mb-8 leading-relaxed">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            At Dr. Baviskar Pathology Lab, we combine clinical expertise with state-of-the-art diagnostic technology. Our commitment is to provide precise, timely, and accessible healthcare solutions to the community in Pune, ensuring every patient receives the highest standard of diagnostic care.
           </p>
           <div className="mb-16">
-            <ButtonWithIcon label="Read More" className="w-full md:w-auto" />
+            <Link href="/about-us" className="w-full md:w-auto">
+              <ButtonWithIcon label="Read More" className="w-auto md:w-auto" />
+            </Link>
           </div>
 
           <div className="grid grid-cols-2 gap-8 md:gap-12">

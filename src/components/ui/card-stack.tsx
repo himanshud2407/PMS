@@ -3,7 +3,7 @@
 import * as React from "react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { SquareArrowOutUpRight } from "lucide-react";
-import { cn } from "@/src/lib/utils";
+import { cn } from "../../lib/utils";
 
 export type CardStackItem = {
   id: string | number;

@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+"use client";
+
 import { motion } from 'motion/react';
 import { CircularTestimonials } from './ui/circular-testimonials';
 import { TESTIMONIALS } from '../constants';
@@ -27,7 +29,7 @@ export default function TestimonialsSection() {
             testimony: "#334155",
             arrowBackground: "#1e293b",
             arrowForeground: "#f8fafc",
-            arrowHoverBackground: "#3b82f6",
+            arrowHoverBackground: "#59AFB5",
           }}
           fontSizes={{
             name: "2rem",
@@ -46,7 +48,7 @@ export default function TestimonialsSection() {
       <motion.div 
         initial={{ opacity: 0, scale: 0.8 }}
         whileInView={{ opacity: 0.05, scale: 1 }}
-        className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-400 rounded-full blur-[120px] -ml-64 -mb-64 pointer-events-none"
+        className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-primary rounded-full blur-[120px] -ml-64 -mb-64 pointer-events-none"
       />
     </section>
   );

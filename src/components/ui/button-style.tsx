@@ -18,7 +18,7 @@ const Button = ({ onClick, label = "Start Your Journey" }: ButtonProps) => {
     >
       {/* Animated Gradient Background Overlay */}
       <motion.div
-        className="absolute inset-0 bg-gradient-to-r from-blue-600 via-blue-400 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+        className="absolute inset-0 bg-gradient-to-r from-primary via-primary-hover to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-500"
         style={{ backgroundSize: "200% 100%" }}
         animate={{ backgroundPosition: ["0% 0%", "100% 0%"] }}
         transition={{ duration: 3, repeat: Infinity, ease: "linear" }}

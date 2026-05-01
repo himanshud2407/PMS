@@ -3,11 +3,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+"use client";
+
 import { motion } from "motion/react";
 
 export default function HonorsBanner() {
   return (
-    <section className="px-6 lg:px-12 py-12">
+    <section className="px-6 lg:px-12 py-12" id="honor">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}

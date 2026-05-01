@@ -3,11 +3,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+"use client";
+
 import { motion } from 'motion/react';
 import { SERVICES } from '../constants';
 import { CardStack } from './ui/card-stack';
 import ButtonWithIcon from './ui/button-with-icon';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 export default function ServicesSection() {
   const [isMobile, setIsMobile] = useState(false);
@@ -28,7 +31,9 @@ export default function ServicesSection() {
             Expert Healthcare Services <br className="hidden md:block" /> Tailored to Your Well-being
           </h2>
         </div>
-        <ButtonWithIcon label="See All Services" className="w-full md:w-auto" />
+        <Link href="/tests" className="w-full md:w-auto">
+          <ButtonWithIcon label="See All Services" className="w-auto md:w-auto" />
+        </Link>
       </div>
 
       <div className="relative pt-10 flex justify-center">

@@ -1,6 +1,6 @@
 import { Button } from "./button";
 import { ArrowUpRight } from "lucide-react";
-import { cn } from "@/src/lib/utils";
+import { cn } from "../../lib/utils";
 
 interface ButtonWithIconProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   label: string;
