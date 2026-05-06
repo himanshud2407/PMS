@@ -96,10 +96,10 @@ const TrustSection: React.FC = () => {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-2 " data-purpose="stats-grid">
+        <div className="grid grid-cols-2" data-purpose="stats-grid">
           {/* Stat 1: Patients Served */}
-          <div className="p-8 md:p-12 border-r border-b border-gray-200 flex flex-col justify-center">
-            <span className="text-4xl md:text-5xl font-extrabold mb-3 text-[#1a1a1a]">
+          <div className="p-4 sm:p-8 md:p-12 border-r border-b border-gray-200 flex flex-col justify-center">
+            <span className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-3 text-[#1a1a1a]">
               20,000+
             </span>
             <p className="text-gray-500 text-sm md:text-base leading-snug">
@@ -107,8 +107,8 @@ const TrustSection: React.FC = () => {
             </p>
           </div>
           {/* Stat 2: Arrival Time */}
-          <div className="p-8 md:p-12  border-b border-gray-200 flex flex-col justify-center">
-            <span className="text-4xl md:text-5xl font-extrabold mb-3 text-[#1a1a1a]">
+          <div className="p-4 sm:p-8 md:p-12 border-b border-gray-200 flex flex-col justify-center">
+            <span className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-3 text-[#1a1a1a]">
               30 Min
             </span>
             <p className="text-gray-500 text-sm md:text-base leading-snug">
@@ -116,9 +116,9 @@ const TrustSection: React.FC = () => {
             </p>
           </div>
           {/* Stat 3: Rating */}
-          <div className="p-8 md:p-12 border-r  border-gray-200 flex flex-col justify-center">
+          <div className="p-4 sm:p-8 md:p-12 border-r border-gray-200 flex flex-col justify-center">
             <div className="flex items-center gap-2 mb-3">
-              <span className="text-4xl md:text-5xl font-extrabold text-[#1a1a1a]">
+              <span className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#1a1a1a]">
                 4.8 ⭐
               </span>
             </div>
@@ -127,8 +127,8 @@ const TrustSection: React.FC = () => {
             </p>
           </div>
           {/* Stat 4: Reduction */}
-          <div className="p-8 md:p-12  border-gray-200 flex flex-col justify-center">
-            <span className="text-4xl md:text-5xl font-extrabold mb-3 text-[#1a1a1a]">
+          <div className="p-4 sm:p-8 md:p-12 border-gray-200 flex flex-col justify-center">
+            <span className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-3 text-[#1a1a1a]">
               65%
             </span>
             <p className="text-gray-500 text-sm md:text-base leading-snug">

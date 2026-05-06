@@ -48,6 +48,11 @@ const CATEGORIES = [
     image: "/wound-care.png",
     time: "30 mins",
   },
+  {
+    title: "IV Therapy",
+    image: "/iv-therepy.png",
+    time: "30 mins",
+  },
 ];
 
 export default function Hero() {
@@ -109,7 +114,7 @@ export default function Hero() {
   };
 
   return (
-    <section id="hero" className="bg-white pt-24">
+    <section id="hero" className="bg-white pt-24 overflow-hidden">
       <main className="max-w-7xl mx-auto px-4 py-6">
         {/* Hero Banner Slider */}
         <div className="relative w-full h-[300px] md:h-[450px] rounded-2xl overflow-hidden mb-12 shadow-sm group">
@@ -194,7 +199,7 @@ export default function Hero() {
               </svg>
             </button>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          <div className="grid grid-cols-3 md:grid-cols-5 gap-4">
             {CATEGORIES.map((cat, i) => (
               <div 
                 key={i} 
@@ -221,7 +226,44 @@ export default function Hero() {
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl font-extrabold text-gray-900">Popular Services</h2>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+
+          {/* Mobile: List layout */}
+          <div className="sm:hidden divide-y divide-gray-100">
+            {isLoading ? (
+              Array(5).fill(0).map((_, i) => (
+                <div key={`m-skel-${i}`} className="animate-pulse flex items-center gap-4 py-4">
+                  <div className="w-20 h-20 rounded-xl bg-gray-200 flex-shrink-0" />
+                  <div className="flex-1 space-y-2">
+                    <div className="h-4 bg-gray-200 rounded w-3/4" />
+                    <div className="h-3 bg-gray-200 rounded w-1/4" />
+                  </div>
+                </div>
+              ))
+            ) : tests.length > 0 ? (
+              tests.map((svc, i) => (
+                <Link href={`/tests/${svc.slug?.current || '#'}`} key={`m-${i}`} className="flex items-center gap-4 py-4 group">
+                  <div className="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 bg-gray-100">
+                    <img 
+                      src={svc.image?.asset ? urlFor(svc.image).url() : "/images/hero/placeholder.jpg"} 
+                      alt={svc.name} 
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform" 
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-bold text-sm text-gray-900 leading-tight">{svc.name}</h3>
+                    <p className="text-sm text-gray-500 mt-1">₹{svc.price}</p>
+                  </div>
+                </Link>
+              ))
+            ) : (
+              <div className="py-12 text-center text-gray-500">
+                No popular services found. Add some in Sanity!
+              </div>
+            )}
+          </div>
+
+          {/* Desktop: Card grid */}
+          <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
             {isLoading ? (
               // Loading Skeleton
               Array(5).fill(0).map((_, i) => (

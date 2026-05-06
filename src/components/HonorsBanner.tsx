@@ -14,7 +14,7 @@ export default function HonorsBanner() {
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="max-w-7xl mx-auto bg-gray-soft rounded-[2.5rem] p-12 grid md:grid-cols-2 gap-12 items-center"
+        className="max-w-7xl mx-auto bg-gray-soft rounded-[2.5rem] p-6 sm:p-12 grid md:grid-cols-2 gap-8 sm:gap-12 items-center"
       >
         <div>
           <span className="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-4 block">
