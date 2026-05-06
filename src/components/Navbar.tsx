@@ -14,8 +14,10 @@ import { usePathname } from "next/navigation";
 
 export default function Navbar() {
   const pathname = usePathname();
+  if (pathname?.startsWith('/admin')) return null;
+  
   const [isOpen, setIsOpen] = useState(false);
-  const [isVisible, setIsVisible] = useState(pathname !== "/");
+  const [isVisible, setIsVisible] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Force scroll to top on route change to prevent "footer to top" glitches
@@ -42,28 +44,6 @@ export default function Navbar() {
     setIsOpen(false);
   };
 
-  useEffect(() => {
-    const handleScroll = () => {
-      // If we are not on the homepage, always show the navbar
-      if (pathname !== "/") {
-        setIsVisible(true);
-        return;
-      }
-
-      // The Hero section pins for 600% of the viewport height.
-      // We show the navbar only when we've scrolled through most of it.
-      if (window.scrollY > window.innerHeight * 5.8) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    handleScroll(); // Initial check
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [pathname]);
-
   return (
     <motion.nav
       initial={{ y: -100, opacity: 0 }}
@@ -76,7 +56,7 @@ export default function Navbar() {
         ease: "easeOut",
         opacity: { duration: 0.3 },
       }}
-      className="fixed top-0 left-0 right-0 z-[100] bg-white/70 backdrop-blur-md px-6 py-4 flex items-center justify-between max-w-7xl mx-auto rounded-b-[2rem] shadow-sm"
+      className="fixed top-0 left-0 right-0 z-[100] bg-white px-6 py-4 flex items-center justify-between max-w-7xl mx-auto rounded-b-[2rem] shadow-md"
     >
       <div className="flex items-center gap-2">
         <Link href="/" aria-label="Go to home page">
@@ -90,7 +70,7 @@ export default function Navbar() {
 
       <div className="hidden lg:flex items-center gap-8 font-medium">
         {[
-          { name: "Home", path: "/#home" },
+          { name: "Home", path: "/" },
           { name: "Tests", path: "/tests" },
           { name: "About Us", path: "/about-us" },
           { name: "Blog", path: "/blog" },

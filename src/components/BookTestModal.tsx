@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { X, User, Mail, Activity, Calendar, ShieldCheck, Phone } from 'lucide-react';
 import { createPortal } from 'react-dom';
 import { useEffect, useState } from 'react';
-import { DIAGNOSTIC_TESTS } from '../constants';
+import { client } from '@/sanity/lib/client';
 
 import { submitToGoogleSheets } from '@/lib/google-sheets';
 
@@ -17,6 +17,19 @@ export default function BookTestModal({ isOpen, onClose }: BookTestModalProps) {
   const [mounted, setMounted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [tests, setTests] = useState<any[]>([]);
+
+  useEffect(() => {
+    async function fetchTests() {
+      try {
+        const data = await client.fetch(`*[_type == "test"] | order(name asc)`);
+        setTests(data || []);
+      } catch (error) {
+        console.error("Sanity fetch error:", error);
+      }
+    }
+    fetchTests();
+  }, []);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -151,8 +164,8 @@ export default function BookTestModal({ isOpen, onClose }: BookTestModalProps) {
                       required
                     >
                       <option value="" disabled>Select test...</option>
-                      {DIAGNOSTIC_TESTS.map((test) => (
-                        <option key={test.name} value={test.name}>{test.name}</option>
+                      {tests.map((test) => (
+                        <option key={test._id || test.name} value={test.name}>{test.name}</option>
                       ))}
                     </select>
                     <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">

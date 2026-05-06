@@ -1,65 +1,17 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Search, 
   ChevronRight, 
-  Activity, 
-  Heart, 
-  Leaf, 
-  Smile, 
-  Droplet,
-  Droplets,
-  Bug,
-  Flame,
-  Beaker,
-  Microscope,
-  ClipboardList,
-  Dna,
-  Clock,
-  TestTube,
-  ShieldPlus,
-  FlaskRound,
-  ShieldAlert,
-  Thermometer,
-  Stethoscope,
-  FlaskConical,
-  TestTubes,
-  Baby,
-  HeartPulse,
-  ShieldCheck,
-  Filter
+  Filter,
+  Activity
 } from 'lucide-react';
-import { DIAGNOSTIC_TESTS } from '../../constants';
+import { client } from '@/sanity/lib/client';
+import { urlFor } from '@/sanity/lib/image';
 import { TestBookingModal } from '../../components/TestBookingModal';
-
-const iconMap: Record<string, any> = {
-  Activity,
-  Droplet,
-  Droplets,
-  Bug,
-  Flame,
-  Beaker,
-  Microscope,
-  ClipboardList,
-  Dna,
-  Clock,
-  TestTube,
-  ShieldPlus,
-  FlaskRound,
-  ShieldAlert,
-  Thermometer,
-  Stethoscope,
-  FlaskConical,
-  TestTubes,
-  Baby,
-  HeartPulse,
-  Heart,
-  Smile,
-  Leaf,
-  ShieldCheck
-};
+import Link from 'next/link';
 
 const categories = ["All Tests", "Blood Test", "Stool Test", "Plasma Test", "Swab Test", "Urine Test"];
 
@@ -68,15 +20,29 @@ export default function TestsPage() {
   const [activeCategory, setActiveCategory] = useState("All Tests");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTest, setSelectedTest] = useState<string | undefined>(undefined);
+  const [tests, setTests] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const filteredTests = DIAGNOSTIC_TESTS.filter(test => {
+  useEffect(() => {
+    async function fetchTests() {
+      try {
+        const data = await client.fetch(`*[_type == "test"] | order(name asc)`);
+        setTests(data || []);
+      } catch (error) {
+        console.error("Sanity fetch error:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchTests();
+  }, []);
+
+  const filteredTests = tests.filter(test => {
     const matchesSearch = test.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          test.desc.toLowerCase().includes(searchQuery.toLowerCase());
+                          (test.description || "").toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = activeCategory === "All Tests" || test.category === activeCategory;
     return matchesSearch && matchesCategory;
   });
-
-  const popularTests = DIAGNOSTIC_TESTS.filter(t => t.popular).slice(0, 3);
 
   return (
     <main className="min-h-screen bg-white pb-24">
@@ -151,75 +117,92 @@ export default function TestsPage() {
 
       {/* Grid Section */}
       <section className="px-6 max-w-7xl mx-auto">
-        <AnimatePresence mode="popLayout">
-          <motion.div 
-            layout
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-          >
-            {filteredTests.map((test, index) => {
-              const Icon = iconMap[test.iconName] || Activity;
-              return (
+        {isLoading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {Array(6).fill(0).map((_, i) => (
+              <div key={i} className="bg-gray-100 animate-pulse h-80 rounded-[2.5rem]" />
+            ))}
+          </div>
+        ) : (
+          <AnimatePresence mode="popLayout">
+            <motion.div 
+              layout
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+            >
+              {filteredTests.map((test, index) => (
                 <motion.div 
                   layout
-                  key={test.name}
+                  key={test._id || test.name}
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.9 }}
                   transition={{ duration: 0.3, delay: index * 0.05 }}
-                  className="bg-white p-8 rounded-[2.5rem] flex flex-col border border-outline-variant hover:border-primary/30 transition-all duration-500 hover:shadow-2xl hover:shadow-primary/5 group relative overflow-hidden"
+                  className="bg-white rounded-[2.5rem] flex flex-col border border-outline-variant hover:border-primary/30 transition-all duration-500 hover:shadow-2xl hover:shadow-primary/5 group relative overflow-hidden"
                 >
-                  {test.popular && (
-                    <div className="absolute top-0 right-0">
-                      <div className="bg-primary text-white text-[10px] font-bold uppercase tracking-widest px-6 py-1 rotate-45 translate-x-6 translate-y-2 shadow-sm">
-                        Popular
+                  {/* Image Header */}
+                  <div className="h-48 bg-gray-100 relative overflow-hidden">
+                    {test.image ? (
+                      <img 
+                        src={urlFor(test.image).url()} 
+                        alt={test.name} 
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <Activity className="w-12 h-12 text-primary/20" />
+                      </div>
+                    )}
+                    <div className="absolute top-4 left-4">
+                      <span className="text-[10px] font-bold text-white uppercase tracking-widest px-3 py-1 bg-primary/80 backdrop-blur-md rounded-full border border-white/20">
+                        {test.category || 'Clinical'}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="p-8 flex flex-col flex-1">
+                    <h4 className="font-display text-2xl text-dark mb-4 group-hover:text-primary transition-colors font-bold leading-tight">
+                      {test.name}
+                    </h4>
+                    <p className="text-secondary leading-relaxed mb-8 line-clamp-3 font-medium">
+                      {test.description}
+                    </p>
+                    
+                    <div className="mt-auto pt-6 border-t border-outline-variant flex items-center justify-between">
+                      <div>
+                        <p className="text-[10px] font-bold text-outline uppercase tracking-widest mb-1">Price</p>
+                        <span className="font-display text-2xl text-dark font-bold">₹{test.price}</span>
+                      </div>
+                      <div className="flex gap-2">
+                        <Link
+                          href={`/tests/${test.slug?.current || '#'}`}
+                          className="bg-gray-100 text-gray-700 p-2.5 rounded-xl hover:bg-gray-200 transition-all"
+                          title="View Details"
+                        >
+                          <ChevronRight className="w-5 h-5" />
+                        </Link>
+                        <button 
+                          onClick={() => { setSelectedTest(test.name); setIsModalOpen(true); }}
+                          className="bg-primary text-white px-6 py-2.5 rounded-xl hover:scale-105 transition-all active:scale-95 shadow-lg shadow-primary/20 font-bold text-sm"
+                        >
+                          Book Now
+                        </button>
                       </div>
                     </div>
-                  )}
-
-                  <div className="w-14 h-14 bg-primary/5 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500 border border-primary/10">
-                    <Icon className="w-7 h-7 text-primary" />
-                  </div>
-                  
-                  <div className="mb-2">
-                    <span className="text-[10px] font-bold text-primary uppercase tracking-widest px-2 py-0.5 bg-primary/5 rounded-md border border-primary/10">
-                      {test.category}
-                    </span>
-                  </div>
-
-                  <h4 className="font-display text-2xl text-dark mb-4 group-hover:text-primary transition-colors font-bold leading-tight">
-                    {test.name}
-                  </h4>
-                  <p className="text-secondary leading-relaxed mb-8 line-clamp-3 font-medium">
-                    {test.desc}
-                  </p>
-                  
-                  <div className="mt-auto pt-6 border-t border-outline-variant flex items-center justify-between">
-                    <div>
-                      <p className="text-[10px] font-bold text-outline uppercase tracking-widest mb-1">Price</p>
-                      <span className="font-display text-2xl text-dark font-bold">{test.price}</span>
-                    </div>
-                    <button 
-                      onClick={() => { setSelectedTest(test.name); setIsModalOpen(true); }}
-                      className="bg-primary text-white px-4 py-2.5 rounded-2xl hover:scale-105 transition-all active:scale-95 shadow-lg shadow-primary/20 flex items-center gap-2 font-bold text-sm"
-                    >
-                      Book Now
-                      <ChevronRight className="w-4 h-4" />
-                    </button>
                   </div>
                 </motion.div>
-              );
-            })}
-          </motion.div>
-        </AnimatePresence>
+              ))}
+            </motion.div>
+          </AnimatePresence>
+        )}
 
         {/* Empty State */}
-        {filteredTests.length === 0 && (
+        {!isLoading && filteredTests.length === 0 && (
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="py-32 text-center"
           >
-            <div className="w-24 h-24 bg-surface-container-low rounded-full flex items-center justify-center mx-auto mb-6 text-outline">
+            <div className="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6 text-outline">
               <Search className="w-12 h-12" />
             </div>
             <h3 className="text-3xl font-display font-bold text-dark mb-2">No tests found</h3>
@@ -234,7 +217,7 @@ export default function TestsPage() {
         )}
 
         {/* Custom Test CTA */}
-        {!searchQuery && activeCategory === "All Tests" && (
+        {!isLoading && !searchQuery && activeCategory === "All Tests" && (
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}

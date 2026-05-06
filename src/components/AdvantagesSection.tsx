@@ -29,8 +29,8 @@ import {
   HeartPulse
 } from 'lucide-react';
 import ButtonWithIcon from './ui/button-with-icon';
-import { useState } from 'react';
-import { DIAGNOSTIC_TESTS } from '../constants';
+import { useState, useEffect } from 'react';
+import { client } from '@/sanity/lib/client';
 import BookTestModal from './BookTestModal';
 import Link from 'next/link';
 
@@ -64,8 +64,24 @@ const iconMap: Record<string, any> = {
 export default function AdvantagesSection() {
   const [showAllTests, setShowAllTests] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const initialTests = DIAGNOSTIC_TESTS.slice(0, 6);
-  const displayTests = showAllTests ? DIAGNOSTIC_TESTS : initialTests;
+  const [tests, setTests] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchTests() {
+      try {
+        const data = await client.fetch(`*[_type == "test"] | order(name asc)`);
+        setTests(data || []);
+      } catch (error) {
+        console.error("Sanity fetch error:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchTests();
+  }, []);
+
+  const displayTests = showAllTests ? tests : tests.slice(0, 6);
 
   return (
     <section id="shop" className="px-4 lg:px-12 py-24 bg-white">
@@ -307,68 +323,78 @@ export default function AdvantagesSection() {
           layout
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12"
         >
-          <AnimatePresence mode="popLayout" initial={false}>
-            {displayTests.map((test, i) => {
-              const Icon = iconMap[test.iconName] || Activity;
-              return (
-                <motion.div
-                  key={test.name}
-                  layout
-                  initial={{ opacity: 0, y: 50, scale: 0.8, filter: "blur(10px)" }}
-                  animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
-                  exit={{ opacity: 0, scale: 0.8, filter: "blur(10px)", transition: { duration: 0.2 } }}
-                  transition={{ 
-                    duration: 0.6, 
-                    delay: showAllTests && i >= 6 ? (i - 6) * 0.1 : 0,
-                    type: "spring",
-                    stiffness: 120,
-                    damping: 18
-                  }}
-                  whileHover={{ y: -12, transition: { duration: 0.2 } }}
-                  className="bg-white rounded-[2rem] p-8 border border-gray-100 shadow-sm hover:shadow-2xl hover:shadow-primary/10 transition-all group relative overflow-hidden"
-                >
-                  {/* Subtle background glow on hover */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/0 to-primary/0 group-hover:from-primary/5 group-hover:to-transparent transition-all duration-500"></div>
+          {isLoading ? (
+            Array(6).fill(0).map((_, i) => (
+              <div key={i} className="bg-gray-50 animate-pulse h-64 rounded-[2rem]" />
+            ))
+          ) : (
+            <AnimatePresence mode="popLayout" initial={false}>
+              {displayTests.map((test, i) => {
+                const Icon = Activity;
+                return (
+                  <motion.div
+                    key={test._id || test.name}
+                    layout
+                    initial={{ opacity: 0, y: 50, scale: 0.8, filter: "blur(10px)" }}
+                    animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+                    exit={{ opacity: 0, scale: 0.8, filter: "blur(10px)", transition: { duration: 0.2 } }}
+                    transition={{ 
+                      duration: 0.6, 
+                      delay: showAllTests && i >= 6 ? (i - 6) * 0.1 : 0,
+                      type: "spring",
+                      stiffness: 120,
+                      damping: 18
+                    }}
+                    whileHover={{ y: -12, transition: { duration: 0.2 } }}
+                    className="bg-white rounded-[2rem] p-8 border border-gray-100 shadow-sm hover:shadow-2xl hover:shadow-primary/10 transition-all group relative overflow-hidden flex flex-col"
+                  >
+                    {/* Subtle background glow on hover */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/0 to-primary/0 group-hover:from-primary/5 group-hover:to-transparent transition-all duration-500"></div>
 
-                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-transform relative z-10 ${
-                    test.color === 'blue' ? 'bg-primary/10 text-primary' :
-                    test.color === 'emerald' ? 'bg-primary/10 text-primary' :
-                    test.color === 'cyan' ? 'bg-primary/10 text-primary' :
-                    test.color === 'rose' ? 'bg-rose-50 text-rose-500' :
-                    test.color === 'indigo' ? 'bg-primary/10 text-primary' :
-                    test.color === 'amber' ? 'bg-amber-50 text-amber-500' :
-                    test.color === 'purple' ? 'bg-purple-50 text-purple-500' :
-                    test.color === 'red' ? 'bg-red-50 text-red-500' :
-                    test.color === 'orange' ? 'bg-orange-50 text-orange-500' :
-                    test.color === 'teal' ? 'bg-primary/10 text-primary' :
-                    'bg-primary/10 text-primary'
-                  }`}>
-                    <Icon size={28} />
-                  </div>
-                  
-                  <div className="relative z-10">
-                    <h4 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">{test.name}</h4>
-                    <p className="text-gray-500 text-sm mb-6 leading-relaxed">
-                      {test.desc}
-                    </p>
-                  </div>
-
-                  <div className="flex items-center justify-between mt-auto pt-6 border-t border-gray-50 relative z-10">
-                    <div>
-                      <span className="text-[10px] text-gray-400 uppercase font-bold tracking-widest block">Starting from</span>
-                      <span className="text-2xl font-bold text-dark group-hover:text-primary transition-colors">{test.price}</span>
+                    <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-transform relative z-10 bg-primary/10 text-primary">
+                      <Icon size={28} />
                     </div>
-                    <button 
-                      onClick={() => setIsModalOpen(true)}
-                      className="bg-gray-soft hover:bg-primary hover:text-white text-dark px-6 py-3 rounded-xl text-sm font-bold transition-all active:scale-95 shadow-sm group-hover:shadow-lg group-hover:shadow-primary/20"
-                    >
-                      Book Now
-                    </button>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
+                    
+                    <div className="relative z-10 flex-1 flex flex-col">
+                      <h4 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors line-clamp-1">{test.name}</h4>
+                      <p className="text-gray-500 text-sm leading-relaxed mb-6">
+                        <span className="line-clamp-3">
+                          {test.description}
+                        </span>
+                        <Link 
+                          href={`/tests/${test.slug?.current || '#'}`}
+                          className="text-primary font-bold text-xs mt-2 inline-block hover:underline"
+                        >
+                          View more
+                        </Link>
+                      </p>
+                    </div>
+
+                    <div className="flex items-center justify-between mt-auto pt-6 border-t border-gray-50 relative z-10">
+                      <div>
+                        <span className="text-[10px] text-gray-400 uppercase font-bold tracking-widest block">Starting from</span>
+                        <span className="text-2xl font-bold text-dark group-hover:text-primary transition-colors">₹{test.price}</span>
+                      </div>
+                      <div className="flex gap-2">
+                        <Link 
+                          href={`/tests/${test.slug?.current || '#'}`}
+                          className="p-3 rounded-xl bg-gray-50 text-gray-400 hover:text-primary transition-colors"
+                        >
+                          <ChevronUp className="rotate-90 w-5 h-5" />
+                        </Link>
+                        <button 
+                          onClick={() => setIsModalOpen(true)}
+                          className="bg-gray-soft hover:bg-primary hover:text-white text-dark px-6 py-3 rounded-xl text-sm font-bold transition-all active:scale-95 shadow-sm group-hover:shadow-lg group-hover:shadow-primary/20"
+                        >
+                          Book Now
+                        </button>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </AnimatePresence>
+          )}
         </motion.div>
 
         <div className="flex justify-center mt-16">

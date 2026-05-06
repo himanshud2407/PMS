@@ -1,12 +1,7 @@
 'use client';
 
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import { motion } from 'motion/react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   Instagram, 
   Facebook, 
@@ -18,20 +13,36 @@ import {
   CheckCircle2,
   ArrowRight
 } from 'lucide-react';
+import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import ButtonWithIcon from './ui/button-with-icon';
 import BookTestModal from './BookTestModal';
+import { client } from '@/sanity/lib/client';
 
 export default function Footer() {
+  const pathname = usePathname();
+  const [tests, setTests] = useState<any[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    async function fetchTests() {
+      try {
+        const data = await client.fetch(`*[_type == "test"] | order(name asc)[0...5]`);
+        setTests(data || []);
+      } catch (error) {
+        console.error("Sanity fetch error:", error);
+      }
+    }
+    fetchTests();
+  }, []);
+
+  if (pathname?.startsWith('/admin')) return null;
+
   const footerLinks = {
-    Tests: [
-      { name: 'CBC Test', href: '#shop' },
-      { name: 'Thyroid Profile', href: '#shop' },
-      { name: 'Malaria Test', href: '#shop' },
-      { name: 'Urine Culture', href: '#shop' },
-      { name: 'Full Body Checkup', href: '#shop' }
-    ],
+    Tests: tests.map(test => ({
+      name: test.name,
+      href: `/tests/${test.slug?.current || ''}`
+    })),
     Product: [
       { name: 'Admissions', href: '#shop' },
       { name: 'Charting', href: '#services' },
@@ -63,24 +74,13 @@ export default function Footer() {
         >
           {/* Logo Icon */}
           <div className="flex justify-center mb-8">
-            {/* <div className="w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center border border-blue-50">
-              <div className="w-8 h-8 bg-primary rounded-md flex items-center justify-center">
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  className="w-5 h-5 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M12 4V20M4 12H20"
-                    stroke="currentColor"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </div>
-            </div> */}
-            <img src="/nav-logo.png" alt="Dr. Baviskar Pathology Lab Logo" className="scale-50" />
+            <a href="/">
+              <img
+                src="/nav-logo.png"
+                alt="Dr. Baviskar Pathology Lab Logo"
+                className="scale-50"
+              />
+            </a>
           </div>
 
           <h2 className="text-4xl md:text-6xl font-display font-bold text-gray-900 mb-8 tracking-tight">
@@ -110,10 +110,6 @@ export default function Footer() {
               onClick={() => setIsModalOpen(true)}
               className="bg-primary text-white shadow-lg shadow-primary/20"
             />
-            {/* <ButtonWithIcon 
-              label="Learn More" 
-              className="bg-white text-gray-900 border border-gray-200 shadow-sm"
-            /> */}
           </div>
         </motion.div>
       </div>
@@ -123,7 +119,11 @@ export default function Footer() {
         {/* Brand & Contact */}
         <div className="lg:col-span-2 space-y-8">
           <div className="flex items-center gap-2">
-            <img src="/nav-logo.png" alt="Dr. Baviskar Pathology Lab Logo" className="h-10 rounded-xl" />
+            <img
+              src="/nav-logo.png"
+              alt="Dr. Baviskar Pathology Lab Logo"
+              className="h-10 rounded-xl"
+            />
           </div>
 
           <div className="space-y-4 text-sm text-gray-500 font-medium">
@@ -137,7 +137,7 @@ export default function Footer() {
             <div className="flex items-center gap-3">
               <Mail className="w-4 h-4 text-primary shrink-0" />
               <a
-                href="mailto:info@patholab.io"
+                href="mailto:info@drbaviskar.com"
                 className="hover:text-primary transition-colors"
               >
                 info@drbaviskar.com
@@ -145,10 +145,7 @@ export default function Footer() {
             </div>
             <div className="flex items-center gap-3">
               <Phone className="w-4 h-4 text-primary shrink-0" />
-              <a
-                href="tel:"
-                className="hover:text-primary transition-colors"
-              >
+              <a href="tel:" className="hover:text-primary transition-colors">
                 +91-86052 92626
               </a>
             </div>
@@ -196,15 +193,24 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto mt-24 pt-8 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-gray-400">
         <p>© 2026 Dr. Baviskar Pathology Lab. All rights reserved.</p>
         <div className="flex gap-6">
-          <a href="/privacy-policy" className="hover:text-primary transition-colors">
+          <a
+            href="/privacy-policy"
+            className="hover:text-primary transition-colors"
+          >
             Privacy Policy
           </a>
-          <a href="/terms-of-service" className="hover:text-primary transition-colors">
+          <a
+            href="/terms-of-service"
+            className="hover:text-primary transition-colors"
+          >
             Terms of Service
           </a>
         </div>
       </div>
-      <BookTestModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <BookTestModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </section>
   );
 }

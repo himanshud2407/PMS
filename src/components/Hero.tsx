@@ -1,431 +1,272 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import LearnMoreButton from "./ui/LearnMoreButton";
+import { useState, useEffect } from "react";
 import BookTestModal from "./BookTestModal";
+import { motion, AnimatePresence } from "motion/react";
+import { client } from "@/sanity/lib/client";
+import { urlFor } from "@/sanity/lib/image";
+import Link from "next/link";
 
-gsap.registerPlugin(ScrollTrigger);
+const BANNERS = [
+  {
+    image: "/images/hero/banner.jpg",
+    title: "Skilled nurse. Expert care @Home in minutes.",
+  },
+  {
+    image: "/images/hero/banner2.png",
+    title: "Expert Doctor consultations in the comfort of your home.",
+  },
+  {
+    image: "/images/hero/banner3.png",
+    title: "Accurate Lab Tests with safe home sample collection.",
+  },
+];
+
+const CATEGORIES = [
+  {
+    title: "Doctor at Home",
+    image:
+      "/dr-home.png",
+    time: "30 mins",
+  },
+  {
+    title: "Vacination",
+    image: "/vacination.png",
+    time: "60 mins",
+  },
+  {
+    title: "Nursing Care",
+    image: "/nursing.png",
+    time: "45 mins",
+  },
+  {
+    title: "Blood Test",
+    image: "/blood-test.png",
+    time: "30 mins",
+  },
+  {
+    title: "Wound Care",
+    image: "/wound-care.png",
+    time: "30 mins",
+  },
+];
 
 export default function Hero() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  // UI references
-  const introRef = useRef<HTMLDivElement>(null);
-  const transitionRef = useRef<HTMLDivElement>(null);
-  const subjectRef = useRef<HTMLDivElement>(null);
-  const finalRef = useRef<HTMLDivElement>(null);
-  const statsRef = useRef<HTMLDivElement>(null);
-
-  const [loadingProgress, setLoadingProgress] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const [criticalLoaded, setCriticalLoaded] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [direction, setDirection] = useState(0);
+  const [tests, setTests] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const context = canvas.getContext("2d");
-    if (!context) return;
-
-    // Force body background to black to prevent white gaps on mobile scroll
-    const originalBg = document.body.style.backgroundColor;
-    document.documentElement.style.backgroundColor = "black";
-    document.body.style.backgroundColor = "black";
-
-    const frameCount = 240;
-    const skipFactor = 2; // Only load every 2nd frame for 2x faster loading
-    const totalToLoad = Math.floor(frameCount / skipFactor);
-    const criticalFrameCount = 10; // Start the site much sooner (was 40)
-    
-    const currentFrame = (index: number) =>
-      `/images/ezgif-frame-${(index + 1).toString().padStart(3, "0")}.png`;
-
-    const images: HTMLImageElement[] = [];
-    const airpods = {
-      frame: 0,
-    };
-
-    let loadedCount = 0;
-    
-    // Prioritize loading frames with skipping
-    const preloadImages = async () => {
-      // Load first frame immediately for instant visual
-      const firstImg = new Image();
-      firstImg.src = currentFrame(0);
-      images[0] = firstImg;
-      
-      for (let i = 0; i < frameCount; i += skipFactor) {
-        const img = new Image();
-        img.src = currentFrame(i);
-        images[i] = img;
+    async function fetchTests() {
+      try {
+        const data = await client.fetch(`*[_type == "test"] | order(name asc)`);
         
-        img.onload = () => {
-          loadedCount++;
-          setLoadingProgress(Math.round((loadedCount / totalToLoad) * 100));
-          
-          if (loadedCount === 1) {
-            render();
-          }
-          
-          if (loadedCount >= criticalFrameCount && !criticalLoaded) {
-            setCriticalLoaded(true);
-          }
-        };
-      }
-    };
+        // Pick the first test from every category
+        const categories = ["Blood Test", "Stool Test", "Plasma Test", "Swab Test", "Urine Test"];
+        const uniqueTests = categories.map(cat => 
+          data.find((test: any) => test.category === cat)
+        ).filter(Boolean);
 
-    preloadImages();
-
-    let lastFrameIndex = -1;
-    const render = (force = false) => {
-      const frameIndex = Math.min(
-        frameCount - 1,
-        Math.max(0, Math.round(airpods.frame)),
-      );
-
-      // Find the nearest loaded frame index based on skipFactor
-      const nearestLoadedIndex = Math.floor(frameIndex / skipFactor) * skipFactor;
-
-      // Only redraw if the frame has actually changed or if forced (e.g. on resize)
-      if (!force && nearestLoadedIndex === lastFrameIndex) return;
-
-      const img = images[nearestLoadedIndex];
-      if (img && img.complete) {
-        // Clear canvas before drawing
-        context.clearRect(0, 0, canvas.width, canvas.height);
-
-        // Scale image to cover canvas (like object-fit: cover)
-        const scale = Math.max(
-          canvas.width / img.width,
-          canvas.height / img.height,
-        );
-        const x = canvas.width / 2 - (img.width / 2) * scale;
-        const y = canvas.height / 2 - (img.height / 2) * scale;
-        context.drawImage(img, x, y, img.width * scale, img.height * scale);
-
-        lastFrameIndex = nearestLoadedIndex;
-      }
-    };
-
-    const handleResize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      render(true);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    // Set initial size
-    handleResize();
-
-    // Initial render attempt in case of fast caching
-    render();
-
-    // Entry animations for UI elements (triggered when critical loading completes)
-    if (criticalLoaded) {
-      const introTl = gsap.timeline();
-      
-      if (introRef.current) {
-        // Animate only the text elements first
-        const textElements = introRef.current.querySelectorAll('h1, p');
-        introTl.from(textElements, {
-          opacity: 0,
-          y: 40,
-          filter: "blur(10px)",
-          stagger: 0.2,
-          duration: 1.2,
-          ease: "power4.out",
-        });
-      }
-
-      if (statsRef.current) {
-        // Then animate stats specifically to avoid double-animation conflicts
-        introTl.fromTo(statsRef.current.children, 
-          { opacity: 0, y: 30, filter: "blur(5px)" },
-          { 
-            opacity: 1, 
-            y: 0, 
-            filter: "blur(0px)",
-            stagger: 0.15,
-            duration: 1,
-            ease: "power3.out"
-          }, 
-          "-=0.6" // Slight overlap with text animation
-        );
+        setTests(uniqueTests);
+      } catch (error) {
+        console.error("Sanity fetch error:", error);
+      } finally {
+        setIsLoading(false);
       }
     }
+    fetchTests();
+  }, []);
 
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: containerRef.current,
-        start: "top top",
-        end: "+=600%",
-        scrub: 1.2, // Smoother follow for premium feel
-        pin: true,
-        anticipatePin: 1,
-      },
-    });
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setDirection(1);
+      setCurrentSlide((prev) => (prev + 1) % BANNERS.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
 
-    // 1. Animate frames
-    tl.to(
-      airpods,
-      {
-        frame: frameCount - 1,
-        ease: "none",
-        onUpdate: () => render(),
-        duration: 10,
-      },
-      0,
-    );
+  const slideVariants = {
+    enter: (direction: number) => ({
+      x: direction > 0 ? "100%" : "-100%",
+      opacity: 0
+    }),
+    center: {
+      zIndex: 1,
+      x: 0,
+      opacity: 1
+    },
+    exit: (direction: number) => ({
+      zIndex: 0,
+      x: direction < 0 ? "100%" : "-100%",
+      opacity: 0
+    })
+  };
 
-    // 2. Timeline for text elements overlay (duration 10 to match frames)
-
-    // Intro: fades out early
-    tl.to(
-      introRef.current,
-      { opacity: 0, scale: 1.1, filter: "blur(10px)", duration: 1 },
-      1,
-    );
-
-    // Transition: comes in and goes out
-    tl.fromTo(
-      transitionRef.current,
-      { opacity: 0, scale: 0.9, y: 50, filter: "blur(10px)" },
-      { opacity: 1, scale: 1, y: 0, filter: "blur(0px)", duration: 1 },
-      2,
-    );
-    tl.to(
-      transitionRef.current,
-      { opacity: 0, scale: 1.1, filter: "blur(10px)", y: -50, duration: 1 },
-      4,
-    );
-
-    // Subject Reveal: comes in and goes out
-    tl.fromTo(
-      subjectRef.current,
-      { opacity: 0, scale: 0.9, y: 50, filter: "blur(10px)" },
-      { opacity: 1, scale: 1, y: 0, filter: "blur(0px)", duration: 1 },
-      5,
-    );
-    tl.to(
-      subjectRef.current,
-      { opacity: 0, scale: 1.1, filter: "blur(10px)", y: -50, duration: 1 },
-      7,
-    );
-
-    // Final Scene: stays till the end
-    tl.fromTo(
-      finalRef.current,
-      { opacity: 0, scale: 0.9, y: 50, filter: "blur(10px)" },
-      { opacity: 1, scale: 1, y: 0, filter: "blur(0px)", duration: 1 },
-      8,
-    );
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      ScrollTrigger.getAll().forEach((t) => t.kill());
-      // Restore original background if needed
-      document.body.style.backgroundColor = originalBg;
-    };
-  }, [criticalLoaded]);
+  const paginate = (newDirection: number) => {
+    setDirection(newDirection);
+    setCurrentSlide((prev) => (prev + newDirection + BANNERS.length) % BANNERS.length);
+  };
 
   return (
-    <section
-      id="hero"
-      ref={containerRef}
-      className="relative bg-black text-white overflow-hidden h-screen h-[100dvh] w-full"
-    >
-      <div className="absolute inset-0 w-full h-full z-0 flex items-center justify-center bg-black">
-        <canvas
-          ref={canvasRef}
-          aria-label="Cinematic diagnostic animation"
-          role="img"
-          className="absolute inset-0 w-full h-full object-cover z-0 will-change-transform"
-          style={{ imageRendering: "auto" }}
-        />
-
-        {/* Subtle dark gradient overlay to make text pop */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-black/70 pointer-events-none z-10"></div>
-      </div>
-
-      <div
-        className={`relative z-20 w-full h-full max-w-7xl mx-auto px-6 lg:px-12 pointer-events-none transition-opacity duration-500 ${!criticalLoaded ? "opacity-0" : "opacity-100"}`}
-      >
-        {/* Intro */}
-        <div
-          ref={introRef}
-          className="absolute top-[40%] md:top-1/2 -translate-y-1/2 left-6 lg:left-12 right-6 md:right-auto max-w-3xl"
-        >
-          <h1 className="text-3xl md:text-7xl font-display font-medium leading-[1.2] md:leading-[1.1] mb-3 md:mb-6 drop-shadow-[0_4px_20px_rgba(0,0,0,0.8)]">
-            Best <span className="text-primary italic">Pathology Lab</span> <br className="hidden md:block" />
-            in Pune for <br />
-            Better Health
-          </h1>
-          <p className="text-lg md:text-2xl text-gray-200 max-w-xl drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] mb-6 md:mb-10">
-            From routine blood tests to specialized diagnostics, we deliver
-            reliable results with cutting-edge technology.
-          </p>
-
-          <div
-            ref={statsRef}
-            className="flex flex-wrap gap-x-8 gap-y-4 md:gap-12 pointer-events-auto"
-          >
-            <div className="relative group">
-              <div className="text-2xl md:text-4xl font-bold text-white mb-0 md:mb-1 drop-shadow-md">
-                99.9%
-              </div>
-              <div className="text-[9px] md:text-xs text-primary uppercase tracking-[0.2em] font-bold opacity-80 group-hover:opacity-100 transition-opacity">
-                Precision Rate
-              </div>
-              <div className="absolute -left-3 md:-left-4 top-0 w-1 h-full bg-gradient-to-b from-primary to-transparent rounded-full opacity-50"></div>
-            </div>
-            <div className="relative group">
-              <div className="text-2xl md:text-4xl font-bold text-white mb-0 md:mb-1 drop-shadow-md">
-                24/7
-              </div>
-              <div className="text-[9px] md:text-xs text-primary uppercase tracking-[0.2em] font-bold opacity-80 group-hover:opacity-100 transition-opacity">
-                Expert Care
-              </div>
-              <div className="absolute -left-3 md:-left-4 top-0 w-1 h-full bg-gradient-to-b from-primary to-transparent rounded-full opacity-50"></div>
-            </div>
-            <div className="relative group">
-              <div className="text-2xl md:text-4xl font-bold text-white mb-0 md:mb-1 drop-shadow-md">
-                10k+
-              </div>
-              <div className="text-[9px] md:text-xs text-primary uppercase tracking-[0.2em] font-bold opacity-80 group-hover:opacity-100 transition-opacity">
-                Happy Lives
-              </div>
-              <div className="absolute -left-3 md:-left-4 top-0 w-1 h-full bg-gradient-to-b from-primary to-transparent rounded-full opacity-50"></div>
-            </div>
-          </div>
-        </div>
-
-        {/* Transition */}
-        <div
-          ref={transitionRef}
-          className="absolute top-1/2 -translate-y-1/2 right-6 lg:right-12 max-w-xl text-right opacity-0"
-        >
-          <h2 className="text-3xl md:text-6xl font-display font-medium mb-4 md:mb-6 drop-shadow-[0_4px_20px_rgba(0,0,0,0.8)]">
-            Beyond Boundaries <br />
-            <span className="text-primary drop-shadow-[0_0_20px_rgba(89,175,181,0.4)]">
-              Discover More
-            </span>
-          </h2>
-          <div className="flex flex-col gap-6 items-end">
-            <div className="bg-white/5 backdrop-blur-xl p-6 md:p-8 rounded-3xl border border-white/10 shadow-2xl relative overflow-hidden group">
-              <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-              <div className="text-4xl md:text-5xl font-bold mb-2 text-white drop-shadow-md">
-                24/7
-              </div>
-              <div className="text-sm md:text-base text-gray-300">
-                Continuous Monitoring & Care
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Subject Reveal */}
-        <div
-          ref={subjectRef}
-          className="absolute top-1/3 left-6 lg:left-12 max-w-xl opacity-0"
-        >
-          <h2 className="text-3xl md:text-6xl font-display font-medium mb-4 md:mb-6 drop-shadow-[0_4px_20px_rgba(0,0,0,0.8)]">
-            Unparalleled <br />
-            <span className="text-primary drop-shadow-[0_0_20px_rgba(89,175,181,0.4)]">
-              Accuracy
-            </span>
-          </h2>
-          <p className="text-xl text-gray-200 drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
-            Every frame of your health data, analyzed and protected. We leave no
-            stone unturned in ensuring your well-being.
-          </p>
-        </div>
-
-        {/* Final Scene */}
-        <div
-          ref={finalRef}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center opacity-0 w-full max-w-4xl"
-        >
-          <h2 className="text-4xl md:text-7xl font-display font-medium mb-6 md:mb-8 drop-shadow-[0_4px_20_rgba(0,0,0,0.8)]">
-            Every Cell Tells <br />
-            <span className="text-primary italic drop-shadow-[0_0_30px_rgba(89,175,181,0.6)]">
-              A Story
-            </span>
-          </h2>
-          <div className="pointer-events-auto flex justify-center">
-            <LearnMoreButton onClick={() => setIsModalOpen(true)} text="Book an Appointment" />
-          </div>
-        </div>
-      </div>
-      <BookTestModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
-
-      {/* Global Loader - Placed last to naturally layer on top */}
-      <AnimatePresence>
-        {!criticalLoaded && (
-          <motion.div
-            initial={{ opacity: 1 }}
-            exit={{ opacity: 0, scale: 1.05, filter: "blur(20px)" }}
-            transition={{ duration: 0.8, ease: "easeInOut" }}
-            className="absolute inset-0 z-[100] bg-black flex flex-col items-center justify-center p-6"
-          >
-            <div className="w-full max-w-md space-y-8">
-              <div className="space-y-4 text-center">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="flex items-center justify-center mb-4"
+    <section id="hero" className="bg-white pt-24">
+      <main className="max-w-7xl mx-auto px-4 py-6">
+        {/* Hero Banner Slider */}
+        <div className="relative w-full h-[300px] md:h-[450px] rounded-2xl overflow-hidden mb-12 shadow-sm group">
+          <AnimatePresence initial={false} custom={direction}>
+            <motion.div
+              key={currentSlide}
+              custom={direction}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{
+                x: { duration: 1, ease: [0.4, 0, 0.2, 1] },
+                opacity: { duration: 0.5 }
+              }}
+              className="absolute inset-0 w-full h-full"
+            >
+              <img
+                src={BANNERS[currentSlide].image}
+                alt={BANNERS[currentSlide].title}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+              <div className="absolute inset-0 flex flex-col justify-end items-start px-8 md:px-16 pb-10 md:pb-16">
+                <h2 className="text-xl md:text-4xl font-Outfit text-white max-w-xl mb-6 [text-shadow:_0_2px_4px_rgba(0,0,0,0.8)] leading-tight">
+                  {BANNERS[currentSlide].title}
+                </h2>
+                <button
+                  onClick={() => setIsModalOpen(true)}
+                  className="w-fit px-8 py-3 bg-white text-dark font-bold rounded-lg hover:bg-gray-100 transition-all shadow-lg active:scale-95"
                 >
-                  <img 
-                    src="/nav-logo.png" 
-                    alt="Dr. Baviskar Logo" 
-                    className="h-14 md:h-16 w-auto object-contain drop-shadow-[0_0_15px_rgba(89,175,181,0.5)]"
-                  />
-                </motion.div>
-                <p className="text-primary text-xs tracking-[0.3em] uppercase font-bold animate-pulse">
-                  {loadingProgress < 40
-                    ? "Calibrating Medical Systems"
-                    : loadingProgress < 80
-                      ? "Optimizing Diagnostic View"
-                      : "Preparing Cinematic Sequence"}
-                </p>
+                  Book Now
+                </button>
               </div>
+            </motion.div>
+          </AnimatePresence>
+          
+          {/* Navigation for Banner */}
+          <button 
+            onClick={() => paginate(-1)}
+            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/30 p-2 rounded-full text-white hover:bg-white/50 transition-all z-10"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path d="M15 19l-7-7 7-7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+            </svg>
+          </button>
+          <button 
+            onClick={() => paginate(1)}
+            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/30 p-2 rounded-full text-white hover:bg-white/50 transition-all z-10"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path d="M9 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+            </svg>
+          </button>
 
-              <div className="relative h-1 w-full bg-white/10 rounded-full overflow-hidden backdrop-blur-sm">
-                <motion.div
-                  className="absolute inset-y-0 left-0 bg-gradient-to-r from-primary via-primary-hover to-primary shadow-[0_0_15px_rgba(89,175,181,0.6)]"
-                  initial={{ width: "0%" }}
-                  animate={{ width: `${loadingProgress}%` }}
-                  transition={{ type: "spring", bounce: 0, duration: 0.5 }}
-                />
-              </div>
+          {/* Indicators */}
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+            {BANNERS.map((_, i) => (
+              <button 
+                key={i} 
+                onClick={() => {
+                  setDirection(i > currentSlide ? 1 : -1);
+                  setCurrentSlide(i);
+                }}
+                className={`h-1.5 rounded-full transition-all ${currentSlide === i ? "w-8 bg-white" : "w-2 bg-white/50"}`}
+              />
+            ))}
+          </div>
+        </div>
 
-              <div className="flex justify-between items-end">
-                <div className="space-y-1">
-                  <span className="text-[10px] text-white/30 uppercase tracking-widest block font-medium">
-                    Progress
-                  </span>
-                  <span className="text-4xl font-display font-bold text-white tabular-nums">
-                    {loadingProgress}
-                    <span className="text-primary text-xl">%</span>
-                  </span>
+        {/* Top Categories */}
+        <section className="mb-12">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-extrabold text-gray-900">Top Categories</h2>
+            <button 
+              onClick={() => setIsModalOpen(true)}
+              className="text-[#59afb5] font-bold text-sm flex items-center hover:underline"
+            >
+              View All
+              <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path d="M9 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+              </svg>
+            </button>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            {CATEGORIES.map((cat, i) => (
+              <div 
+                key={i} 
+                className="flex flex-col items-center cursor-pointer group"
+                onClick={() => setIsModalOpen(true)}
+              >
+                <div className="w-full aspect-[4/3] rounded-lg overflow-hidden mb-3 transition-transform duration-200 group-hover:-translate-y-1">
+                  <img src={cat.image} alt={cat.title} className="w-full h-full object-cover" />
                 </div>
-                <div className="text-right text-[10px] text-white/30 uppercase tracking-widest font-medium pb-1">
-                  Version 2.4.0 <br />
-                  System Stable
+                <p className="font-bold text-sm text-gray-800">{cat.title}</p>
+                <div className="flex items-center text-[10px] text-gray-500 font-semibold mt-1">
+                  <svg className="w-3 h-3 text-orange-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path clipRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" fillRule="evenodd" />
+                  </svg>
+                  {cat.time}
                 </div>
               </div>
-            </div>
+            ))}
+          </div>
+        </section>
 
-            {/* Decorative Elements */}
-            <div className="absolute inset-0 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:40px_40px] opacity-20 pointer-events-none"></div>
-            <div className="absolute top-12 left-12 w-24 h-24 border-t border-l border-white/10 rounded-tl-3xl pointer-events-none"></div>
-            <div className="absolute bottom-12 right-12 w-24 h-24 border-b border-r border-white/10 rounded-br-3xl pointer-events-none"></div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+        {/* Popular Services */}
+        <section>
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-extrabold text-gray-900">Popular Services</h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            {isLoading ? (
+              // Loading Skeleton
+              Array(5).fill(0).map((_, i) => (
+                <div key={i} className="animate-pulse bg-gray-100 h-64 rounded-lg" />
+              ))
+            ) : tests.length > 0 ? (
+              tests.map((svc, i) => (
+                <div 
+                  key={i} 
+                  className="flex flex-col bg-white border border-gray-100 rounded-lg overflow-hidden transition-shadow duration-200 hover:shadow-md"
+                >
+                  <div className="h-32 bg-gray-100">
+                    <img 
+                      src={svc.image?.asset ? urlFor(svc.image).url() : "/images/hero/placeholder.jpg"} 
+                      alt={svc.name} 
+                      className="w-full h-full object-cover" 
+                    />
+                  </div>
+                  <div className="p-4 flex flex-col flex-1">
+                    <h3 className="font-bold text-sm text-gray-900 mb-2">{svc.name}</h3>
+                    <p className="text-xs text-gray-500 line-clamp-2 mb-4 leading-relaxed">
+                      {svc.description}
+                    </p>
+                    <div className="mt-auto">
+                      <p className="font-extrabold text-gray-900 mb-3 text-lg">₹{svc.price}</p>
+                      <Link 
+                        href={`/tests/${svc.slug?.current || '#'}`}
+                        className="block w-full text-center py-2 bg-[#59afb5] text-white text-xs font-bold rounded-lg hover:bg-[#428e94] transition-colors uppercase tracking-wider"
+                      >
+                        Book Now
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="col-span-full py-12 text-center text-gray-500">
+                No popular services found. Add some in Sanity!
+              </div>
+            )}
+          </div>
+        </section>
+      </main>
+
+      <BookTestModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </section>
   );
 }
