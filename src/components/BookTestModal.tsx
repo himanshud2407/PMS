@@ -62,6 +62,17 @@ export default function BookTestModal({ isOpen, onClose }: BookTestModalProps) {
     setMounted(true);
   }, []);
 
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
+
   if (!mounted) return null;
 
   return createPortal(
@@ -71,7 +82,7 @@ export default function BookTestModal({ isOpen, onClose }: BookTestModalProps) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-dark/60 backdrop-blur-md"
+          className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-6 bg-dark/60 backdrop-blur-md overflow-y-auto overflow-x-hidden"
           onClick={onClose}
         >
           <motion.div
@@ -79,7 +90,7 @@ export default function BookTestModal({ isOpen, onClose }: BookTestModalProps) {
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.95, opacity: 0, y: 20 }}
             transition={{ type: "spring", damping: 30, stiffness: 400 }}
-            className="relative w-full max-w-lg overflow-hidden rounded-[2.5rem] bg-white shadow-[0_32px_64px_-16px_rgba(0,0,0,0.2)] border border-gray-100 p-6 md:p-10"
+            className="relative w-full max-w-lg overflow-hidden rounded-[2rem] md:rounded-[2.5rem] bg-white shadow-[0_32px_64px_-16px_rgba(0,0,0,0.2)] border border-gray-100 p-6 md:p-10 my-auto"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}

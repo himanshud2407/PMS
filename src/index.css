@@ -77,13 +77,15 @@
 }
 
 html {
-  /* scroll-behavior: smooth; */
+  scroll-behavior: smooth;
+  
 }
 
-@layer base {
-  body {
-    @apply font-sans antialiased text-dark bg-white overflow-x-hidden;
-  }
+html,
+body {
+  @apply font-sans antialiased text-dark bg-white overflow-x-hidden;
+  width: auto;
+  position: relative;
 }
 
 .text-gradient {

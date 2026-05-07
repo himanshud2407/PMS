@@ -114,7 +114,7 @@ export default function Hero() {
   };
 
   return (
-    <section id="hero" className="bg-white pt-24 overflow-hidden">
+    <section id="hero" className="bg-white pt-24 overflow-x-hidden">
       <main className="max-w-7xl mx-auto px-4 py-6">
         {/* Hero Banner Slider */}
         <div className="relative w-full h-[300px] md:h-[450px] rounded-2xl overflow-hidden mb-12 shadow-sm group">
@@ -209,7 +209,7 @@ export default function Hero() {
                 <div className="w-full aspect-[4/3] rounded-lg overflow-hidden mb-3 transition-transform duration-200 group-hover:-translate-y-1">
                   <img src={cat.image} alt={cat.title} className="w-full h-full object-cover" />
                 </div>
-                <p className="font-bold text-sm text-gray-800">{cat.title}</p>
+                <p className="font-bold text-[11px] md:text-sm text-gray-800 text-center line-clamp-1 w-full px-1">{cat.title}</p>
                 <div className="flex items-center text-[10px] text-gray-500 font-semibold mt-1">
                   <svg className="w-3 h-3 text-orange-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
                     <path clipRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" fillRule="evenodd" />

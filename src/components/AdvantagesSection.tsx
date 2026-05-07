@@ -84,7 +84,7 @@ export default function AdvantagesSection() {
   const displayTests = showAllTests ? tests : tests.slice(0, 6);
 
   return (
-    <section id="shop" className="px-4 lg:px-12 py-24 bg-white">
+    <section id="shop" className="px-4 lg:px-12 py-24 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-12 lg:gap-20">
         <div className="lg:w-1/3">
           <span className="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-4 block">Our Advantage</span>
