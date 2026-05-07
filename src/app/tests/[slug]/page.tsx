@@ -3,6 +3,7 @@ import { urlFor } from '@/sanity/lib/image'
 import { PortableText } from '@portabletext/react'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import TestBookingTrigger from '@/components/TestBookingTrigger'
 
 async function getTest(slug: string) {
   const query = `*[_type == "test" && slug.current == $slug][0]{
@@ -79,9 +80,7 @@ export default async function TestDetailsPage({ params }: { params: Promise<{ sl
             </div>
 
             <div className="mt-auto flex flex-col sm:flex-row gap-4">
-              <button className="flex-1 bg-primary hover:bg-primary-hover text-white py-4 rounded-xl font-bold transition-all shadow-lg shadow-primary/20">
-                Book This Test Now
-              </button>
+              <TestBookingTrigger testName={test.name} />
               <Link 
                 href="/contact"
                 className="flex-1 border border-gray-200 hover:bg-gray-50 text-center py-4 rounded-xl font-bold transition-all"

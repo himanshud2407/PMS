@@ -220,7 +220,7 @@ export default function ContactPage() {
                       <p className="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-1">
                         Central Helpline
                       </p>
-                      <p className="text-2xl font-bold text-on-background">
+                      <p className="text-xl sm:text-2xl font-bold text-on-background">
                         <a href="tel:+918605292626">+91 8605292626</a>
                       </p>
                     </div>
@@ -238,8 +238,8 @@ export default function ContactPage() {
                       <p className="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-1">
                         Email Us
                       </p>
-                      <p className="text-2xl font-bold text-on-background">
-                        <a href="mailto:info@drbaviskar.com">
+                      <p className="text-lg sm:text-xl md:text-2xl font-bold text-on-background truncate">
+                        <a href="mailto:info@drbaviskar.com" title="info@drbaviskar.com">
                           info@drbaviskar.com
                         </a>
                       </p>

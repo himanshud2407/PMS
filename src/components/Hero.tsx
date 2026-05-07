@@ -199,7 +199,7 @@ export default function Hero() {
               </svg>
             </button>
           </div>
-          <div className="grid grid-cols-3 md:grid-cols-5 gap-4">
+          <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
             {CATEGORIES.map((cat, i) => (
               <div 
                 key={i} 
