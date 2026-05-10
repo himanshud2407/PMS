@@ -5,6 +5,8 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import TestBookingTrigger from '@/components/TestBookingTrigger'
 
+import { Metadata } from 'next'
+
 async function getTest(slug: string) {
   const query = `*[_type == "test" && slug.current == $slug][0]{
     name,
@@ -16,6 +18,27 @@ async function getTest(slug: string) {
   }`
   const test = await client.fetch(query, { slug })
   return test
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params
+  const test = await getTest(slug)
+
+  if (!test) {
+    return {
+      title: 'Test Not Found | Dr. Baviskar Pathology Lab',
+    }
+  }
+
+  return {
+    title: `${test.name} | Pathology Test in Pune`,
+    description: `${test.name} at Dr. Baviskar Pathology Lab Pune. ${test.description?.substring(0, 150)}...`,
+    openGraph: {
+      title: `${test.name} | Dr. Baviskar Pathology Lab`,
+      description: test.description,
+      images: test.image ? [urlFor(test.image).url()] : [],
+    },
+  }
 }
 
 export default async function TestDetailsPage({ params }: { params: Promise<{ slug: string }> }) {

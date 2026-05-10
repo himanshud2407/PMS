@@ -11,6 +11,7 @@ import {
 import { client } from '@/sanity/lib/client';
 import { urlFor } from '@/sanity/lib/image';
 import { TestBookingModal } from '../../components/TestBookingModal';
+import { Skeleton } from '../../components/ui/skeleton';
 import Link from 'next/link';
 
 const categories = ["All Tests", "Blood Test", "Stool Test", "Plasma Test", "Swab Test", "Urine Test"];
@@ -120,7 +121,30 @@ export default function TestsPage() {
         {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {Array(6).fill(0).map((_, i) => (
-              <div key={i} className="bg-gray-100 animate-pulse h-80 rounded-[2.5rem]" />
+              <div key={i} className="bg-white rounded-[2.5rem] border border-outline-variant p-0 overflow-hidden flex flex-col h-[480px]">
+                <div className="h-48">
+                  <Skeleton className="w-full h-full rounded-none" />
+                </div>
+                <div className="p-8 flex flex-col flex-1">
+                  <Skeleton className="h-8 w-3/4 mb-4" />
+                  <div className="space-y-3 mb-8">
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-2/3" />
+                  </div>
+                  
+                  <div className="mt-auto pt-6 border-t border-outline-variant flex items-center justify-between">
+                    <div className="space-y-2">
+                      <Skeleton className="h-3 w-12" />
+                      <Skeleton className="h-8 w-20" />
+                    </div>
+                    <div className="flex gap-2">
+                      <Skeleton className="w-10 h-10 rounded-xl" />
+                      <Skeleton className="w-28 h-10 rounded-xl" />
+                    </div>
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
         ) : (

@@ -1,19 +1,55 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
 "use client";
 
 import { motion } from 'motion/react';
-import { BLOG_POSTS } from '../constants';
 import { ArrowRight, Calendar, Clock, ChevronRight } from 'lucide-react';
 import ButtonWithIcon from './ui/button-with-icon';
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
+import { client } from '@/sanity/lib/client';
+import { urlFor } from '@/sanity/lib/image';
 
 export default function BlogSection() {
-  const featuredPost = BLOG_POSTS[0];
-  const otherPosts = BLOG_POSTS.slice(1, 4);
+  const [posts, setPosts] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchPosts() {
+      try {
+        const query = `*[_type == "blog"] | order(publishedAt desc)[0...4]{
+          title,
+          "slug": slug.current,
+          tag,
+          publishedAt,
+          readTime,
+          image,
+          excerpt,
+          "featured": coalesce(featured, false)
+        }`;
+        const data = await client.fetch(query);
+        setPosts(data || []);
+      } catch (error) {
+        console.error("Sanity fetch error:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchPosts();
+  }, []);
+
+  if (isLoading) return <div className="h-96 bg-gray-50 animate-pulse" />;
+  if (posts.length === 0) return null;
+
+  const featuredPost = posts.find(p => p.featured) || posts[0];
+  const otherPosts = posts.filter(p => p.slug !== featuredPost.slug).slice(0, 3);
+
+  const formatDate = (dateString: string) => {
+    if (!dateString) return 'Recently';
+    return new Date(dateString).toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    });
+  };
 
   return (
     <section id="blog" className="px-6 lg:px-12 py-32 bg-white overflow-hidden">
@@ -63,13 +99,15 @@ export default function BlogSection() {
             viewport={{ once: true }}
             className="lg:col-span-7 group cursor-pointer"
           >
-            <Link href={`/blog/${featuredPost.title.toLowerCase().replace(/ /g, '-')}`}>
-              <div className="relative aspect-[16/10] rounded-[3rem] overflow-hidden mb-8 shadow-2xl">
-                <img 
-                  src={featuredPost.image} 
-                  alt={featuredPost.title} 
-                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
-                />
+            <Link href={`/blog/${featuredPost.slug}`}>
+              <div className="relative aspect-[16/10] rounded-[3rem] overflow-hidden mb-8 shadow-2xl bg-gray-50">
+                {featuredPost.image && (
+                  <img 
+                    src={urlFor(featuredPost.image).url()} 
+                    alt={featuredPost.image.alt || featuredPost.title} 
+                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                  />
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-dark/80 via-dark/20 to-transparent" />
                 <div className="absolute top-8 left-8">
                   <span className="bg-white/90 backdrop-blur-md text-dark px-5 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest border border-white/20">
@@ -79,14 +117,14 @@ export default function BlogSection() {
               </div>
               <div className="px-2">
                 <div className="flex items-center gap-6 mb-4 text-xs font-bold text-gray-400 uppercase tracking-widest">
-                  <span className="flex items-center gap-2"><Calendar size={14} className="text-primary" /> Oct 24, 2025</span>
-                  <span className="flex items-center gap-2"><Clock size={14} className="text-primary" /> 8 Min Read</span>
+                  <span className="flex items-center gap-2"><Calendar size={14} className="text-primary" /> {formatDate(featuredPost.publishedAt)}</span>
+                  <span className="flex items-center gap-2"><Clock size={14} className="text-primary" /> {featuredPost.readTime}</span>
                 </div>
                 <h3 className="text-3xl md:text-4xl font-bold font-display leading-tight mb-4 group-hover:text-primary transition-colors">
                   {featuredPost.title}
                 </h3>
                 <p className="text-gray-500 text-lg leading-relaxed line-clamp-2 max-w-2xl mb-6">
-                  {featuredPost.description || "Discover how our cutting-edge laboratory techniques are revolutionizing patient outcomes and setting new standards in clinical diagnostics."}
+                  {featuredPost.excerpt}
                 </p>
                 <div className="flex items-center gap-2 text-primary font-bold group/link">
                   <span>Read Article</span>
@@ -100,20 +138,22 @@ export default function BlogSection() {
           <div className="lg:col-span-5 flex flex-col gap-10">
             {otherPosts.map((post, index) => (
               <motion.div
-                key={post.title}
+                key={post.slug}
                 initial={{ opacity: 0, x: 40 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
                 className="group cursor-pointer"
               >
-                <Link href={`/blog/${post.title.toLowerCase().replace(/ /g, '-')}`} className="flex gap-6 items-center">
-                  <div className="w-32 h-32 md:w-40 md:h-40 shrink-0 rounded-[2rem] overflow-hidden shadow-lg border border-gray-100">
-                    <img 
-                      src={post.image} 
-                      alt={post.title} 
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
+                <Link href={`/blog/${post.slug}`} className="flex gap-6 items-center">
+                  <div className="w-32 h-32 md:w-40 md:h-40 shrink-0 rounded-[2rem] overflow-hidden shadow-lg border border-gray-100 bg-gray-50">
+                    {post.image && (
+                      <img 
+                        src={urlFor(post.image).url()} 
+                        alt={post.image.alt || post.title} 
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      />
+                    )}
                   </div>
                   <div className="flex flex-col gap-2">
                     <span className="text-[10px] font-bold text-primary uppercase tracking-widest">{post.tag}</span>
@@ -121,7 +161,7 @@ export default function BlogSection() {
                       {post.title}
                     </h3>
                     <div className="flex items-center gap-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">
-                      <span className="flex items-center gap-1.5"><Calendar size={12} /> {post.date || "Oct 20, 2025"}</span>
+                      <span className="flex items-center gap-1.5"><Calendar size={12} /> {formatDate(post.publishedAt)}</span>
                     </div>
                   </div>
                 </Link>

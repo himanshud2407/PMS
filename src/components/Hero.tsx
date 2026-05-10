@@ -139,9 +139,9 @@ export default function Hero() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
               <div className="absolute inset-0 flex flex-col justify-end items-start px-8 md:px-16 pb-10 md:pb-16">
-                <h2 className="text-xl md:text-4xl font-Outfit text-white max-w-xl mb-6 [text-shadow:_0_2px_4px_rgba(0,0,0,0.8)] leading-tight">
+                <h1 className="text-xl md:text-4xl font-Outfit text-white max-w-xl mb-6 [text-shadow:_0_2px_4px_rgba(0,0,0,0.8)] leading-tight">
                   {BANNERS[currentSlide].title}
-                </h2>
+                </h1>
                 <button
                   onClick={() => setIsModalOpen(true)}
                   className="w-fit px-8 py-3 bg-white text-dark font-bold rounded-lg hover:bg-gray-100 transition-all shadow-lg active:scale-95"
