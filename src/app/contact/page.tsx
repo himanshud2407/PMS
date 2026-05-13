@@ -239,8 +239,8 @@ export default function ContactPage() {
                         Email Us
                       </p>
                       <p className="text-lg sm:text-xl md:text-2xl font-bold text-on-background truncate">
-                        <a href="mailto:info@drbaviskar.com" title="info@drbaviskar.com">
-                          info@drbaviskar.com
+                        <a href="mailto:info@drbaviskarpathlabs.com" title="info@drbaviskarpathlabs.com">
+                          info@drbaviskarpathlabs.com
                         </a>
                       </p>
                     </div>

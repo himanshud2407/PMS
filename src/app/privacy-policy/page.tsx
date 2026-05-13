@@ -3,8 +3,8 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
 export const metadata = {
-  title: 'Privacy Policy - Dr. Baviskar Pathology Lab',
-  description: 'Privacy Policy of Dr. Baviskar Pathology Lab.',
+  title: 'Privacy Policy - Dr Baviskar Pathology lab',
+  description: 'Privacy Policy of Dr Baviskar Pathology lab.',
 };
 
 export default function PrivacyPolicy() {
@@ -18,7 +18,7 @@ export default function PrivacyPolicy() {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">1. Introduction</h2>
             <p className="mb-4">
-              Welcome to Dr. Baviskar Pathology Lab. We respect your privacy and are committed to protecting your personal data. 
+              Welcome to Dr Baviskar Pathology lab. We respect your privacy and are committed to protecting your personal data. 
               This privacy policy will inform you as to how we look after your personal data when you visit our website 
               (regardless of where you visit it from) and tell you about your privacy rights and how the law protects you.
             </p>
@@ -62,7 +62,7 @@ export default function PrivacyPolicy() {
             <p className="mb-4">
               If you have any questions about this privacy policy or our privacy practices, please contact us at:
               <br /><br />
-              <strong>Email:</strong> info@drbaviskar.com
+              <strong>Email:</strong> info@drbaviskarpathlabs.com
               <br />
               <strong>Phone:</strong> +91-86052 92626
             </p>

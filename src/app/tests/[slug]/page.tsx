@@ -32,9 +32,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   return {
     title: `${test.name} | Pathology Test in Pune`,
-    description: `${test.name} at Dr. Baviskar Pathology Lab Pune. ${test.description?.substring(0, 150)}...`,
+    description: `${test.name} at Dr Baviskar Pathology lab Pune. ${test.description?.substring(0, 150)}...`,
     openGraph: {
-      title: `${test.name} | Dr. Baviskar Pathology Lab`,
+      title: `${test.name} | Dr Baviskar Pathology lab`,
       description: test.description,
       images: test.image ? [urlFor(test.image).url()] : [],
     },

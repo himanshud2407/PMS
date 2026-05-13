@@ -3,8 +3,8 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
 export const metadata = {
-  title: 'Terms of Service - Dr. Baviskar Pathology Lab',
-  description: 'Terms of Service of Dr. Baviskar Pathology Lab.',
+  title: 'Terms of Service - Dr Baviskar Pathology lab',
+  description: 'Terms of Service of Dr Baviskar Pathology lab.',
 };
 
 export default function TermsOfService() {
@@ -19,7 +19,7 @@ export default function TermsOfService() {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">1. Acceptance of Terms</h2>
             <p className="mb-4">
-              By accessing and using the services provided by Dr. Baviskar Pathology Lab, you accept and agree to be bound by the terms and provision of this agreement. 
+              By accessing and using the services provided by Dr Baviskar Pathology lab, you accept and agree to be bound by the terms and provision of this agreement. 
               In addition, when using these particular services, you shall be subject to any posted guidelines or rules applicable to such services.
             </p>
           </section>
@@ -27,7 +27,7 @@ export default function TermsOfService() {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">2. Description of Service</h2>
             <p className="mb-4">
-              Dr. Baviskar Pathology Lab provides diagnostic testing and health-related information services. The information provided through our platform and tests is for informational purposes and should not be considered a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition.
+              Dr Baviskar Pathology lab provides diagnostic testing and health-related information services. The information provided through our platform and tests is for informational purposes and should not be considered a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition.
             </p>
           </section>
 

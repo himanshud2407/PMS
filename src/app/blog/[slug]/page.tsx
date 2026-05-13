@@ -28,12 +28,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   if (!post) {
     return {
-      title: 'Article Not Found | Dr. Baviskar Pathology Lab',
+      title: 'Article Not Found | Dr Baviskar Pathology lab',
     };
   }
 
   return {
-    title: `${post.seoTitle || post.title} | Dr. Baviskar Lab`,
+    title: `${post.seoTitle || post.title} | Dr Baviskar Pathology lab`,
     description: post.excerpt || `Read our latest article about ${post.title}.`,
     openGraph: {
       title: post.title,

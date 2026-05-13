@@ -62,7 +62,7 @@ export default function Navbar() {
         <Link href="/" aria-label="Go to home page">
           <img
             src="/nav-logo.png"
-            alt="Dr. Baviskar Pathology Lab Logo"
+            alt="Dr Baviskar Pathology lab Logo"
             className="pl-5 pt-2 h-10 rounded-xl"
           />
         </Link>

@@ -32,7 +32,7 @@ export default function Loading() {
       <section className="px-6 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div key={i} className="bg-white rounded-[2.5rem] border border-outline-variant p-0 overflow-hidden flex flex-col h-[480px]">
+            <div key={i} className="bg-white rounded-[2.5rem] p-0 overflow-hidden flex flex-col h-[480px]">
               <Skeleton className="h-48 w-full rounded-none" />
               <div className="p-8 space-y-6 flex-1 flex flex-col">
                 <Skeleton className="h-8 w-3/4" />
@@ -41,7 +41,7 @@ export default function Loading() {
                   <Skeleton className="h-4 w-full" />
                   <Skeleton className="h-4 w-2/3" />
                 </div>
-                <div className="mt-auto pt-6 border-t border-outline-variant flex items-center justify-between">
+                <div className="mt-auto pt-6 flex items-center justify-between">
                   <div className="space-y-2">
                     <Skeleton className="h-3 w-12" />
                     <Skeleton className="h-8 w-20" />

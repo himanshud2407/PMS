@@ -60,22 +60,22 @@ export default function AboutPage() {
                 variants={fadeInUp}
                 className="text-xl text-on-surface-variant leading-relaxed max-w-xl"
               >
-                Founded in 1998, Dr. Baviskar Pathology Lab has been at the forefront of medical diagnostic innovation in Pune. We merge advanced robotics with human expertise to deliver accuracy you can trust.
+                Founded in 2016, Dr Baviskar Pathology lab has been at the forefront of medical diagnostic innovation in Pune. We merge advanced robotics with human expertise to deliver accuracy you can trust.
               </motion.p>
               
               <motion.div variants={fadeInUp} className="flex flex-wrap gap-8 pt-4">
                 <div className="group">
-                  <div className="text-4xl font-bold text-primary mb-1 group-hover:scale-110 transition-transform origin-left">25+</div>
+                  <div className="text-4xl font-bold text-primary mb-1 group-hover:scale-110 transition-transform origin-left">10+</div>
                   <div className="text-xs text-on-surface-variant uppercase tracking-widest font-bold">Years of Trust</div>
                 </div>
                 <div className="w-px h-12 bg-outline-variant/50 hidden sm:block" />
                 <div className="group">
-                  <div className="text-4xl font-bold text-primary mb-1 group-hover:scale-110 transition-transform origin-left">2M+</div>
+                  <div className="text-4xl font-bold text-primary mb-1 group-hover:scale-110 transition-transform origin-left">5000+</div>
                   <div className="text-xs text-on-surface-variant uppercase tracking-widest font-bold">Patient Samples</div>
                 </div>
                 <div className="w-px h-12 bg-outline-variant/50 hidden sm:block" />
                 <div className="group">
-                  <div className="text-4xl font-bold text-primary mb-1 group-hover:scale-110 transition-transform origin-left">100+</div>
+                  <div className="text-4xl font-bold text-primary mb-1 group-hover:scale-110 transition-transform origin-left">50+</div>
                   <div className="text-xs text-on-surface-variant uppercase tracking-widest font-bold">Specialized Tests</div>
                 </div>
               </motion.div>
@@ -106,7 +106,7 @@ export default function AboutPage() {
                 <p className="text-lg font-medium text-on-surface leading-tight italic">
                   "Accuracy is not just our goal; it's our foundational promise to every patient."
                 </p>
-                <p className="mt-4 text-sm font-bold text-on-surface-variant">— Dr. Baviskar, Founder</p>
+                <p className="mt-4 text-sm font-bold text-on-surface-variant">— Dr Baviskar, Founder</p>
               </motion.div>
             </motion.div>
           </div>

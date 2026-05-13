@@ -41,7 +41,7 @@ export default function ServicesSection() {
           items={SERVICES.map(s => ({
             id: s.id,
             title: s.title,
-            description: "Advanced diagnostic and treatment solutions specialized for your unique health needs.",
+            description: s.description,
             imageSrc: s.image,
             href: "#"
           }))}

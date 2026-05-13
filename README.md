@@ -1,4 +1,4 @@
-# 🔬 Dr. Baviskar Pathology Lab
+# 🔬 Dr Baviskar Pathology lab
 
 [![Next.js](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
@@ -6,7 +6,7 @@
 [![Sanity CMS](https://img.shields.io/badge/Sanity_CMS-v3-F03E2F?style=for-the-badge&logo=sanity)](https://www.sanity.io/)
 [![Framer Motion](https://img.shields.io/badge/Framer_Motion-v12-6633CC?style=for-the-badge&logo=framer)](https://www.framer.com/motion/)
 
-> **Dr. Baviskar Pathology Lab** is a premium, state-of-the-art medical diagnostic platform built for the modern era. It combines clinical precision with a cinematic digital experience, featuring advanced animations, 3D integration, and AI-driven insights.
+> **Dr Baviskar Pathology lab** is a premium, state-of-the-art medical diagnostic platform built for the modern era. It combines clinical precision with a cinematic digital experience, featuring advanced animations, 3D integration, and AI-driven insights.
 
 ![Lab Banner](public/clinic.png )
 
@@ -112,7 +112,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## 🤝 Contact
 
-**Dr. Baviskar Pathology Lab** - [Contact Us](https://drbaviskarpathology.com)
+**Dr Baviskar Pathology lab** - [Contact Us](https://drbaviskarpathlabs.com)
 
 Project Link: [https://github.com/himanshud2407/pms](https://github.com/himanshud2407/pms)
 

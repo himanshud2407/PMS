@@ -4,8 +4,8 @@ import { client } from '@/sanity/lib/client';
 import BlogListWrapper from './BlogListWrapper';
 
 export const metadata: Metadata = {
-  title: 'Medical Journal & News | Dr. Baviskar Pathology Lab',
-  description: 'Expert perspectives on clinical diagnostics, wellness trends, and the future of personalized medicine.',
+  title: 'Health Blog & Medical News | Dr Baviskar Pathology lab',
+  description: 'Stay updated with the latest health tips, medical news, and laboratory updates from Dr Baviskar Pathology lab in Pune.',
 };
 
 async function getBlogPosts() {

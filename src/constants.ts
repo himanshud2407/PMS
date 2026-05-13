@@ -5,46 +5,44 @@
 
 export const SERVICES = [
   {
-    id: "cardiology",
-    title: "Cardiology",
+    id: "Blood Tests",
+    title: "Blood Tests",
     image:
-      "https://images.unsplash.com/photo-1628595351029-c2bf17511435?auto=format&fit=crop&q=80&w=600",
+      "https://images.unsplash.com/photo-1542884841-9f546e727bca?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     angle: -30,
+    description: "Checks blood for diseases and health conditions.",
   },
   {
-    id: "neurology",
-    title: "Neurology",
+    id: "Plasma Tests",
+    title: "Plasma Tests",
     image:
-      "https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&q=80&w=600",
+      "https://images.unsplash.com/photo-1697192156499-d85cfe1452c0?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     angle: -15,
+    description: "Liquid part of blood that carries nutrients and waste.",
   },
   {
-    id: "surgery",
-    title: "General Surgery",
+    id: "Swab Tests",
+    title: "Swab Tests",
     image:
-      "https://images.unsplash.com/photo-1579154491915-611e891d3a5b?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "https://images.unsplash.com/photo-1599493758596-fe2b083e3f0f?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     angle: 0,
+    description: "Sample taken with cotton to detect infections.",
   },
   {
-    id: "orthopedics",
-    title: "Orthopedics",
+    id: "Urine Tests",
+    title: "Urine Tests",
     image:
-      "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&q=80&w=600",
+      "https://images.unsplash.com/photo-1624957866401-52b4ff88eac4?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     angle: 15,
+    description: "Examines urine to find infections or diseases.",
   },
   {
-    id: "pediatrics",
-    title: "Pediatrics",
+    id: "Stool Test",
+    title: "Stool Test",
     image:
-      "https://images.unsplash.com/photo-1581594693702-fbdc51b2763b?auto=format&fit=crop&q=80&w=600",
+      "https://images.unsplash.com/photo-1611073061965-bd5b3cb27bb4?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     angle: 30,
-  },
-  {
-    id: "gynecology",
-    title: "Gynecology",
-    image:
-      "https://images.unsplash.com/photo-1512102438733-bfa4ed29aef7?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    angle: 45,
+    description: "Tests feces for digestive problems or infections.",
   },
 ];
 
@@ -106,7 +104,7 @@ export const BLOG_POSTS = [
     image: "https://lh3.googleusercontent.com/aida-public/AB6AXuA98-ygOMrO1P77g0B6727Y7gmij-n0Q7Txu1ZnN4MMx-ckolhYhjwqC7JKFMNcivxoa4I47prZoDkrOkF0RlLaAYsl8Cyw1fyZbt3JeND8Uo8aXf6bCitFbM4NpfkkSdDqYwJnkbUtbVtkxYTK-uPeeAaNlGWMaJWsrXmQWsF_lxbimeOr6h_JVx2LQ2qvpY0mEt3ksmr_8UNZI80jjc80dDTGh7-qU8xlxTagxrEGwDdmpDYKD9GrKBELXXALyttZWIpvi_MbWhw"
   },
   {
-    title: "MediLab Unveils Next-Gen AI Results Portal",
+    title: "Dr Baviskar Pathology lab Unveils Next-Gen AI Results Portal",
     tag: "Lab Updates",
     date: "Oct 18, 2024",
     readTime: "4 min read",
@@ -130,7 +128,7 @@ export const BLOG_POSTS = [
     image: "https://lh3.googleusercontent.com/aida-public/AB6AXuANfTGKLRA9pIOBhtSNWJbeOLOpBIVFzy781nXKZNwFqr0ckx8vH2Ih1rAp5kisTcOyCRRSP3A8sq3ZIFairO9R0YoA4Mn1wQVFxCTKqA-TXuTgdKyhGsDY0PoR5yKgBImT_i4NUcQvRq9K13gwxNSb2B0gNeA6YogstNR-x2eubasYVMoBf-tl0O50khUoouVwM2bg9kEdBTOUES-0lPkYnVHKKyerOQ_JQt4DqdNbcuBxp0QsJx8RrK8dO6JXsSMC5HeR6BMlj-8"
   },
   {
-    title: "MediLab Expands Home Collection Services",
+    title: "Dr Baviskar Pathology lab Expands Home Collection Services",
     tag: "Lab Updates",
     date: "Oct 08, 2024",
     readTime: "3 min read",

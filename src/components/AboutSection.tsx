@@ -21,7 +21,7 @@ export default function AboutSection() {
             Providing Advanced Care with Modern Equipment
           </h2>
           <p className="text-gray-500 text-base md:text-lg mb-8 leading-relaxed">
-            At Dr. Baviskar Pathology Lab, we combine clinical expertise with state-of-the-art diagnostic technology. Our commitment is to provide precise, timely, and accessible healthcare solutions to the community in Pune, ensuring every patient receives the highest standard of diagnostic care.
+            At Dr Baviskar Pathology lab, we combine clinical expertise with state-of-the-art diagnostic technology. Our commitment is to provide precise, timely, and accessible healthcare solutions to the community in Pune, ensuring every patient receives the highest standard of diagnostic care.
           </p>
           <div className="mb-16">
             <Link href="/about-us" className="w-full md:w-auto">

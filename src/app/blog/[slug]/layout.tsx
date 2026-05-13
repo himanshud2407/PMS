@@ -6,14 +6,14 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
   if (!post) {
     return {
-      title: 'Post Not Found | Dr. Baviskar Pathology Lab',
+      title: 'Post Not Found | Dr Baviskar Pathology lab',
       description: 'The requested blog post could not be found.',
     };
   }
 
   return {
-    title: `${post.title} | Dr. Baviskar Pathology Lab`,
-    description: post.description || `Read about ${post.title} on Dr. Baviskar Pathology Lab's blog.`,
+    title: `${post.title} | Dr Baviskar Pathology lab`,
+    description: post.description || `Read about ${post.title} on Dr Baviskar Pathology lab's blog.`,
     openGraph: {
       title: post.title,
       description: post.description,

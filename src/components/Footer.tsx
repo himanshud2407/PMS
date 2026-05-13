@@ -56,7 +56,7 @@ export default function Footer() {
       { name: 'Testimonials', href: '#testimonials' }
     ],
     Support: [
-      { name: 'Contact Us', href: 'mailto:info@drbaviskar.com' },
+      { name: 'Contact Us', href: 'mailto:info@drbaviskarpathlabs.com' },
       { name: 'Privacy Policy', href: '/privacy-policy' },
       { name: 'Terms of Service', href: '/terms-of-service' }
     ]
@@ -77,7 +77,7 @@ export default function Footer() {
             <a href="/">
               <img
                 src="/nav-logo.png"
-                alt="Dr. Baviskar Pathology Lab Logo"
+                alt="Dr Baviskar Pathology lab Logo"
                 className="scale-50"
               />
             </a>
@@ -121,7 +121,7 @@ export default function Footer() {
           <div className="flex items-center gap-2">
             <img
               src="/nav-logo.png"
-              alt="Dr. Baviskar Pathology Lab Logo"
+              alt="Dr Baviskar Pathology lab Logo"
               className="h-10 rounded-xl"
             />
           </div>
@@ -137,10 +137,10 @@ export default function Footer() {
             <div className="flex items-center gap-3">
               <Mail className="w-4 h-4 text-primary shrink-0" />
               <a
-                href="mailto:info@drbaviskar.com"
+                href="mailto:info@drbaviskarpathlabs.com"
                 className="hover:text-primary transition-colors"
               >
-                info@drbaviskar.com
+                info@drbaviskarpathlabs.com
               </a>
             </div>
             <div className="flex items-center gap-3">

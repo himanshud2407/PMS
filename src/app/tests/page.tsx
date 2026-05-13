@@ -121,7 +121,7 @@ export default function TestsPage() {
         {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {Array(6).fill(0).map((_, i) => (
-              <div key={i} className="bg-white rounded-[2.5rem] border border-outline-variant p-0 overflow-hidden flex flex-col h-[480px]">
+              <div key={i} className="bg-white rounded-[2.5rem] p-0 overflow-hidden flex flex-col h-[480px]">
                 <div className="h-48">
                   <Skeleton className="w-full h-full rounded-none" />
                 </div>
@@ -133,7 +133,7 @@ export default function TestsPage() {
                     <Skeleton className="h-4 w-2/3" />
                   </div>
                   
-                  <div className="mt-auto pt-6 border-t border-outline-variant flex items-center justify-between">
+                  <div className="mt-auto pt-6 flex items-center justify-between">
                     <div className="space-y-2">
                       <Skeleton className="h-3 w-12" />
                       <Skeleton className="h-8 w-20" />
