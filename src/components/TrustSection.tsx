@@ -16,7 +16,7 @@ const TrustSection: React.FC = () => {
       {/* Header */}
       <div className="text-center mb-16" data-purpose="section-header">
         <h2 className="text-3xl md:text-4xl font-extrabold mb-4 text-[#1a1a1a]">
-          Why families trust Tez Health?
+          Why families trust Dr. Baviskar Pathology Lab?
         </h2>
         <p className="text-lg text-gray-600 font-medium">
           Faster, safer and more reliable healthcare — right at your doorstep.
