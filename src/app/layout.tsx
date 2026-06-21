@@ -58,8 +58,8 @@ export const metadata: Metadata = {
     description: "Accurate, reliable, and fast diagnostic services in Pune.",
     images: ["https://drbaviskarpathlabs.com/logo.png"],
   },
-  facebook: {
-    appId: "1024358177243492",
+  other: {
+    "fb:app_id": "1024358177243492",
   },
   robots: {
     index: true,
