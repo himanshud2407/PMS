@@ -58,9 +58,9 @@ export const metadata: Metadata = {
     description: "Accurate, reliable, and fast diagnostic services in Pune.",
     images: ["https://drbaviskarpathlabs.com/logo.png"],
   },
-  other: {
-    "fb:app_id": "1024358177243492",
-  },
+  // other: {
+  //   "fb:app_id": "1024358177243492",
+  // },
   robots: {
     index: true,
     follow: true,
@@ -91,53 +91,54 @@ export default function RootLayout({
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
-      "name": "Dr Baviskar Pathology lab",
-      "url": "https://drbaviskarpathlabs.com",
-      "logo": "https://drbaviskarpathlabs.com/logo.png"
+      name: "Dr Baviskar Pathology lab",
+      url: "https://drbaviskarpathlabs.com",
+      logo: "https://drbaviskarpathlabs.com/logo.png",
     },
     {
       "@context": "https://schema.org",
       "@type": "MedicalBusiness",
-      "name": "Dr Baviskar Pathology lab",
-      "logo": "https://drbaviskarpathlabs.com/logo.png",
-      "image": "https://drbaviskarpathlabs.com/nav-logo.png",
+      name: "Dr Baviskar Pathology lab",
+      logo: "https://drbaviskarpathlabs.com/logo.png",
+      image: "https://drbaviskarpathlabs.com/nav-logo.png",
       "@id": "https://drbaviskarpathlabs.com",
-      "url": "https://drbaviskarpathlabs.com",
-      "telephone": "+91-86052 92626",
-      "email": "info@drbaviskarpathlabs.com",
-      "address": {
+      url: "https://drbaviskarpathlabs.com",
+      telephone: "+91-86052 92626",
+      email: "info@drbaviskarpathlabs.com",
+      address: {
         "@type": "PostalAddress",
-        "streetAddress": "Shop No 1, Bhalerao Corner, Near Vijay Sales, Rahatani Road, Pimple Saudagar",
-        "addressLocality": "Pune",
-        "addressRegion": "Maharashtra",
-        "postalCode": "411027",
-        "addressCountry": "IN"
+        streetAddress:
+          "Shop No 1, Bhalerao Corner, Near Vijay Sales, Rahatani Road, Pimple Saudagar",
+        addressLocality: "Pune",
+        addressRegion: "Maharashtra",
+        postalCode: "411027",
+        addressCountry: "IN",
       },
-      "geo": {
+      geo: {
         "@type": "GeoCoordinates",
-        "latitude": 18.5911,
-        "longitude": 73.7915
+        latitude: 18.5911,
+        longitude: 73.7915,
       },
-      "openingHoursSpecification": [
+      openingHoursSpecification: [
         {
           "@type": "OpeningHoursSpecification",
-          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-          "opens": "07:00",
-          "closes": "20:00"
+          dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+          opens: "07:00",
+          closes: "20:00",
         },
         {
           "@type": "OpeningHoursSpecification",
-          "dayOfWeek": "Saturday",
-          "opens": "08:00",
-          "closes": "16:00"
-        }
+          dayOfWeek: "Saturday",
+          opens: "08:00",
+          closes: "16:00",
+        },
       ],
-      "sameAs": [
+      sameAs: [
         "https://facebook.com/drbaviskarpathlabs",
         "https://twitter.com/drbaviskarpathlabs",
-        "https://instagram.com/drbaviskarpathlabs"
-      ]
-    }
+        "https://instagram.com/drbaviskarpathlabs",
+      ],
+    },
   ];
 
   return (
@@ -145,11 +146,15 @@ export default function RootLayout({
       <head>
         <link rel="icon" type="image/png" href="/logo.png" />
         <link rel="apple-touch-icon" href="/logo.png" />
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <meta property="fb:app_id" content="1024358177243492" />
       </head>
       <body className="overflow-x-hidden">
         <div id="root">
