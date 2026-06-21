@@ -12,8 +12,17 @@ export const metadata: Metadata = {
     default: "Dr Baviskar Pathology lab | Best Pathology Lab in Pune",
     template: "%s | Dr Baviskar Pathology lab",
   },
-  description: "Dr Baviskar Pathology lab - The best pathology lab in Pune. Offering accurate blood tests, full body checkups, and specialized diagnostics with 24/7 care.",
-  keywords: ["Pathology lab near Pune", "Blood test Pune", "Diagnostic center Pune", "Dr Baviskar Pathology lab", "Full body checkup Pune", "Lab tests Pune", "Home blood collection Pune"],
+  description:
+    "Dr Baviskar Pathology lab - The best pathology lab in Pune. Offering accurate blood tests, full body checkups, and specialized diagnostics with 24/7 care.",
+  keywords: [
+    "Pathology lab near Pune",
+    "Blood test Pune",
+    "Diagnostic center Pune",
+    "Dr Baviskar Pathology lab",
+    "Full body checkup Pune",
+    "Lab tests Pune",
+    "Home blood collection Pune",
+  ],
   authors: [{ name: "Dr Baviskar Pathology lab" }],
   creator: "Dr Baviskar Pathology lab",
   publisher: "Dr Baviskar Pathology lab",
@@ -28,7 +37,8 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "Dr Baviskar Pathology lab | Best Diagnostic Center in Pune",
-    description: "Accurate, reliable, and fast diagnostic services in Pune. Book your health tests today.",
+    description:
+      "Accurate, reliable, and fast diagnostic services in Pune. Book your health tests today.",
     url: "https://drbaviskarpathlabs.com",
     siteName: "Dr Baviskar Pathology lab",
     locale: "en_IN",
@@ -47,6 +57,9 @@ export const metadata: Metadata = {
     title: "Dr Baviskar Pathology lab | Best Diagnostic Center in Pune",
     description: "Accurate, reliable, and fast diagnostic services in Pune.",
     images: ["https://drbaviskarpathlabs.com/logo.png"],
+  },
+  facebook: {
+    appId: "1024358177243492",
   },
   robots: {
     index: true,
