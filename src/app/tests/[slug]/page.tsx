@@ -36,7 +36,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     openGraph: {
       title: `${test.name} | Dr Baviskar Pathology lab`,
       description: test.description,
-      images: test.image ? [urlFor(test.image).url()] : [],
+      images: test.image ? [urlFor(test.image).url()] : ["https://drbaviskarpathlabs.com/logo.png"],
     },
   }
 }

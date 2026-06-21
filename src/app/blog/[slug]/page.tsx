@@ -6,6 +6,7 @@ import { Metadata } from 'next';
 import BlogContentWrapper from './BlogContentWrapper';
 import { client } from '@/sanity/lib/client';
 import { notFound } from 'next/navigation';
+import { urlFor } from '@/sanity/lib/image';
 
 async function getBlogPost(slug: string) {
   const query = `*[_type == "blog" && slug.current == $slug][0]{
@@ -38,7 +39,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     openGraph: {
       title: post.title,
       description: post.excerpt,
-      images: post.image ? [post.image] : [],
+      images: post.image ? [urlFor(post.image).url()] : ["https://drbaviskarpathlabs.com/logo.png"],
     },
   };
 }

@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     openGraph: {
       title: post.title,
       description: post.description,
-      images: [post.image],
+      images: post.image ? [post.image] : ["https://drbaviskarpathlabs.com/logo.png"],
     },
   };
 }

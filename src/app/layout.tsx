@@ -33,11 +33,20 @@ export const metadata: Metadata = {
     siteName: "Dr Baviskar Pathology lab",
     locale: "en_IN",
     type: "website",
+    images: [
+      {
+        url: "https://drbaviskarpathlabs.com/logo.png",
+        width: 1200,
+        height: 630,
+        alt: "Dr Baviskar Pathology lab Logo",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Dr Baviskar Pathology lab | Best Diagnostic Center in Pune",
     description: "Accurate, reliable, and fast diagnostic services in Pune.",
+    images: ["https://drbaviskarpathlabs.com/logo.png"],
   },
   robots: {
     index: true,
