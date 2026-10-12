@@ -81,6 +81,8 @@ export const metadata: Metadata = {
 
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import ScrollProgressBar from "../components/3d/ScrollProgressBar";
+import SmoothScrollProvider from "../components/3d/SmoothScrollProvider";
 
 export default function RootLayout({
   children,
@@ -157,11 +159,14 @@ export default function RootLayout({
         <meta property="fb:app_id" content="1024358177243492" />
       </head>
       <body className="overflow-x-hidden">
-        <div id="root">
-          <Navbar />
-          {children}
-          <Footer />
-        </div>
+        <SmoothScrollProvider>
+          <ScrollProgressBar />
+          <div id="root">
+            <Navbar />
+            {children}
+            <Footer />
+          </div>
+        </SmoothScrollProvider>
       </body>
     </html>
   );

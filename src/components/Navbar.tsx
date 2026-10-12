@@ -44,6 +44,16 @@ export default function Navbar() {
     setIsOpen(false);
   };
 
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <motion.nav
       initial={{ y: -100, opacity: 0 }}
@@ -56,15 +66,25 @@ export default function Navbar() {
         ease: "easeOut",
         opacity: { duration: 0.3 },
       }}
-      className="fixed top-0 left-0 right-0 z-[100] bg-white px-6 py-4 flex items-center justify-between max-w-7xl mx-auto rounded-b-[2rem] shadow-md"
+      className={`fixed top-0 left-0 right-0 z-[100] px-6 py-3.5 flex items-center justify-between max-w-7xl mx-auto rounded-b-[2.5rem] transition-all duration-300 ${
+        scrolled
+          ? "bg-white/85 backdrop-blur-xl shadow-xl shadow-black/5 border-b border-white/50"
+          : "bg-white/95 backdrop-blur-md shadow-md border-b border-gray-100"
+      }`}
     >
       <div className="flex items-center gap-2">
         <Link href="/" aria-label="Go to home page">
-          <img
-            src="/nav-logo.png"
-            alt="Dr Baviskar Pathology lab Logo"
-            className="pl-5 pt-2 h-10 rounded-xl"
-          />
+          <motion.div
+            whileHover={{ scale: 1.04, rotateY: 6 }}
+            transition={{ type: "spring", stiffness: 400, damping: 25 }}
+            className="perspective-[600px]"
+          >
+            <img
+              src="/nav-logo.png"
+              alt="Dr Baviskar Pathology lab Logo"
+              className="pl-5 pt-1.5 h-10 rounded-xl"
+            />
+          </motion.div>
         </Link>
       </div>
 

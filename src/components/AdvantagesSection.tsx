@@ -33,6 +33,9 @@ import { useState, useEffect } from 'react';
 import { client } from '@/sanity/lib/client';
 import BookTestModal from './BookTestModal';
 import Link from 'next/link';
+import TiltCard from './3d/TiltCard';
+import StatCounter from './3d/StatCounter';
+import FloatingMedicalParticles from './3d/FloatingMedicalParticles';
 
 const iconMap: Record<string, any> = {
   Heart,
@@ -84,8 +87,9 @@ export default function AdvantagesSection() {
   const displayTests = showAllTests ? tests : tests.slice(0, 6);
 
   return (
-    <section id="shop" className="px-4 lg:px-12 py-24 bg-white overflow-hidden">
-      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-12 lg:gap-20">
+    <section id="shop" className="px-4 lg:px-12 py-24 bg-white overflow-hidden relative">
+      <FloatingMedicalParticles count={5} />
+      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-12 lg:gap-20 relative z-10">
         <div className="lg:w-1/3">
           <span className="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-4 block">Our Advantage</span>
           <h2 className="text-3xl md:text-5xl font-display font-medium leading-tight mb-8">
@@ -103,9 +107,10 @@ export default function AdvantagesSection() {
 
         <div className="lg:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Bento Card 1: 95% Chart */}
-          <motion.div 
-            whileHover={{ y: -5 }}
-            className="bg-gray-soft rounded-[2.5rem] p-8 col-span-1 border border-transparent hover:border-primary/20 transition-colors shadow-sm hover:shadow-xl hover:shadow-primary/5 group/card relative overflow-hidden"
+          <TiltCard 
+            maxTilt={8}
+            scale={1.02}
+            className="bg-gray-soft rounded-[2.5rem] p-8 col-span-1 border border-gray-100/80 hover:border-primary/30 transition-colors shadow-sm hover:shadow-2xl group/card relative overflow-hidden"
           >
             {/* Background Grid Lines */}
             <div className="absolute inset-x-8 top-8 h-40 flex flex-col justify-between pointer-events-none opacity-20">
@@ -131,15 +136,18 @@ export default function AdvantagesSection() {
               ))}
             </div>
             <div className="flex items-end gap-3">
-              <span className="text-5xl font-bold font-display tracking-tighter group-hover/card:text-primary transition-colors">95%</span>
+              <span className="text-5xl font-bold font-display tracking-tighter group-hover/card:text-primary transition-colors">
+                <StatCounter value={95} suffix="%" />
+              </span>
               <p className="text-sm text-gray-500 font-medium leading-tight">of patients seen within 24 hours.</p>
             </div>
-          </motion.div>
+          </TiltCard>
 
           {/* Bento Card 2: 82% Circle */}
-          <motion.div 
-            whileHover={{ y: -5 }}
-            className="bg-gray-soft rounded-[2.5rem] p-8 flex flex-col items-center justify-center relative overflow-hidden border border-transparent hover:border-primary/20 transition-colors shadow-sm hover:shadow-xl hover:shadow-primary/5 group/card"
+          <TiltCard 
+            maxTilt={8}
+            scale={1.02}
+            className="bg-gray-soft rounded-[2.5rem] p-8 flex flex-col items-center justify-center relative overflow-hidden border border-gray-100/80 hover:border-primary/30 transition-colors shadow-sm hover:shadow-2xl group/card"
           >
             <div className="relative w-48 h-48 flex items-center justify-center">
               <svg className="w-full h-full -rotate-90 drop-shadow-[0_0_8px_rgba(29,104,242,0.2)]">
@@ -163,20 +171,16 @@ export default function AdvantagesSection() {
                 />
               </svg>
               <div className="absolute flex flex-col items-center text-center">
-                <motion.span 
-                  initial={{ scale: 0.8, opacity: 0 }}
-                  whileInView={{ scale: 1, opacity: 1 }}
-                  className="text-5xl font-bold font-display group-hover/card:scale-110 transition-transform"
-                >
-                  82%
-                </motion.span>
+                <span className="text-5xl font-bold font-display group-hover/card:scale-110 transition-transform">
+                  <StatCounter value={82} suffix="%" />
+                </span>
                 <span className="text-[9px] text-gray-400 uppercase font-bold tracking-[0.2em] px-6 mt-1 leading-tight">
                   Experienced Better <br/> Well-being
                 </span>
               </div>
             </div>
             
-            {/* Floating Icons with specific animations */}
+            {/* Floating Icons with 3D physics */}
             <motion.div 
               animate={{ y: [0, -10, 0] }}
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
@@ -200,12 +204,13 @@ export default function AdvantagesSection() {
             >
               <Activity size={18} className="text-primary" />
             </motion.div>
-          </motion.div>
+          </TiltCard>
 
           {/* Bento Card 3: Line Chart */}
-          <motion.div 
-            whileHover={{ y: -5 }}
-            className="bg-gray-soft rounded-[2.5rem] p-8 border border-transparent hover:border-primary/20 transition-colors shadow-sm hover:shadow-xl hover:shadow-primary/5 group/card"
+          <TiltCard 
+            maxTilt={8}
+            scale={1.02}
+            className="bg-gray-soft rounded-[2.5rem] p-8 border border-gray-100/80 hover:border-primary/30 transition-colors shadow-sm hover:shadow-2xl group/card"
           >
             <div className="flex justify-between items-start mb-6">
               <div>
@@ -255,20 +260,21 @@ export default function AdvantagesSection() {
                 </motion.g>
               </svg>
               <div className="absolute -top-2 right-0 bg-dark text-white text-[10px] px-2 py-1 rounded-full font-bold shadow-lg transform translate-y-[-100%]">
-                92% Stability
+                <StatCounter value={92} suffix="% Stability" />
               </div>
             </div>
-          </motion.div>
+          </TiltCard>
 
           {/* Bento Card 4: Shop Promo */}
-          <motion.div 
-            whileHover={{ y: -5 }}
+          <TiltCard 
+            maxTilt={8}
+            scale={1.02}
             className="bg-gradient-to-br from-primary to-primary-hover rounded-[2.5rem] p-5 flex gap-5 items-center relative overflow-hidden group/card shadow-xl shadow-primary/20"
           >
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.15),transparent)] pointer-events-none"></div>
             
             <motion.div 
-              whileHover={{ scale: 1.05, rotate: -2 }}
+              whileHover={{ scale: 1.08, rotate: -3 }}
               className="bg-white/20 backdrop-blur-md rounded-2xl p-3 flex-1 relative z-10 aspect-square flex items-center justify-center border border-white/20 shadow-inner"
             >
                <img 
@@ -285,9 +291,8 @@ export default function AdvantagesSection() {
               <button className="bg-white text-primary px-6 py-2.5 rounded-full text-sm font-bold shadow-md hover:shadow-lg transition-all active:scale-95">
                 Shop Now
               </button>
-
             </div>
-          </motion.div>
+          </TiltCard>
         </div>
       </div>
 
@@ -345,51 +350,56 @@ export default function AdvantagesSection() {
                       stiffness: 120,
                       damping: 18
                     }}
-                    whileHover={{ y: -12, transition: { duration: 0.2 } }}
-                    className="bg-white rounded-[2rem] p-8 border border-gray-100 shadow-sm hover:shadow-2xl hover:shadow-primary/10 transition-all group relative overflow-hidden flex flex-col"
+                    className="h-full"
                   >
-                    {/* Subtle background glow on hover */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/0 to-primary/0 group-hover:from-primary/5 group-hover:to-transparent transition-all duration-500"></div>
+                    <TiltCard
+                      maxTilt={8}
+                      scale={1.02}
+                      className="bg-white rounded-[2rem] p-8 border border-gray-100 shadow-sm hover:shadow-2xl hover:border-primary/30 transition-all group relative overflow-hidden flex flex-col h-full"
+                    >
+                      {/* Subtle background glow on hover */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-primary/0 to-primary/0 group-hover:from-primary/5 group-hover:to-transparent transition-all duration-500"></div>
 
-                    <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-transform relative z-10 bg-primary/10 text-primary">
-                      <Icon size={28} />
-                    </div>
-                    
-                    <div className="relative z-10 flex-1 flex flex-col">
-                      <h4 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors line-clamp-1">{test.name}</h4>
-                      <p className="text-gray-500 text-sm leading-relaxed mb-6">
-                        <span className="line-clamp-3">
-                          {test.description}
-                        </span>
-                        <Link 
-                          href={`/tests/${test.slug?.current || '#'}`}
-                          className="text-primary font-bold text-xs mt-2 inline-block hover:underline"
-                        >
-                          View more
-                        </Link>
-                      </p>
-                    </div>
+                      <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-transform relative z-10 bg-primary/10 text-primary">
+                        <Icon size={28} />
+                      </div>
+                      
+                      <div className="relative z-10 flex-1 flex flex-col">
+                        <h4 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors line-clamp-1">{test.name}</h4>
+                        <p className="text-gray-500 text-sm leading-relaxed mb-6">
+                          <span className="line-clamp-3">
+                            {test.description}
+                          </span>
+                          <Link 
+                            href={`/tests/${test.slug?.current || '#'}`}
+                            className="text-primary font-bold text-xs mt-2 inline-block hover:underline"
+                          >
+                            View more
+                          </Link>
+                        </p>
+                      </div>
 
-                    <div className="flex items-center justify-between mt-auto pt-6 border-t border-gray-50 relative z-10">
-                      <div>
-                        <span className="text-[10px] text-gray-400 uppercase font-bold tracking-widest block">Starting from</span>
-                        <span className="text-2xl font-bold text-dark group-hover:text-primary transition-colors">₹{test.price}</span>
+                      <div className="flex items-center justify-between mt-auto pt-6 border-t border-gray-50 relative z-10">
+                        <div>
+                          <span className="text-[10px] text-gray-400 uppercase font-bold tracking-widest block">Starting from</span>
+                          <span className="text-2xl font-bold text-dark group-hover:text-primary transition-colors">₹{test.price}</span>
+                        </div>
+                        <div className="flex gap-2">
+                          <Link 
+                            href={`/tests/${test.slug?.current || '#'}`}
+                            className="p-3 rounded-xl bg-gray-50 text-gray-400 hover:text-primary transition-colors"
+                          >
+                            <ChevronUp className="rotate-90 w-5 h-5" />
+                          </Link>
+                          <button 
+                            onClick={() => setIsModalOpen(true)}
+                            className="bg-gray-soft hover:bg-primary hover:text-white text-dark px-6 py-3 rounded-xl text-sm font-bold transition-all active:scale-95 shadow-sm group-hover:shadow-lg group-hover:shadow-primary/20"
+                          >
+                            Book Now
+                          </button>
+                        </div>
                       </div>
-                      <div className="flex gap-2">
-                        <Link 
-                          href={`/tests/${test.slug?.current || '#'}`}
-                          className="p-3 rounded-xl bg-gray-50 text-gray-400 hover:text-primary transition-colors"
-                        >
-                          <ChevronUp className="rotate-90 w-5 h-5" />
-                        </Link>
-                        <button 
-                          onClick={() => setIsModalOpen(true)}
-                          className="bg-gray-soft hover:bg-primary hover:text-white text-dark px-6 py-3 rounded-xl text-sm font-bold transition-all active:scale-95 shadow-sm group-hover:shadow-lg group-hover:shadow-primary/20"
-                        >
-                          Book Now
-                        </button>
-                      </div>
-                    </div>
+                    </TiltCard>
                   </motion.div>
                 );
               })}

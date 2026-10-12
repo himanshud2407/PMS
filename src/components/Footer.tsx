@@ -18,6 +18,8 @@ import { cn } from '@/lib/utils';
 import ButtonWithIcon from './ui/button-with-icon';
 import BookTestModal from './BookTestModal';
 import { client } from '@/sanity/lib/client';
+import TiltCard from './3d/TiltCard';
+import FloatingMedicalParticles from './3d/FloatingMedicalParticles';
 
 export default function Footer() {
   const pathname = usePathname();
@@ -65,53 +67,55 @@ export default function Footer() {
   return (
     <section className="bg-white pt-24 pb-12 px-6 lg:px-12">
       {/* CTA Section */}
-      <div className="max-w-7xl mx-auto mb-32">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="relative rounded-[3rem] overflow-hidden bg-gradient-to-br from-[#f2f9f9] via-[#e0f2f3] to-[#FFFFFF] p-12 md:p-20 text-center border border-primary/10 shadow-sm"
+      <div className="max-w-7xl mx-auto mb-32 relative">
+        <TiltCard
+          maxTilt={4}
+          scale={1.01}
+          glareOpacity={0.18}
+          className="relative rounded-[3rem] overflow-hidden bg-gradient-to-br from-[#f2f9f9] via-[#e0f2f3] to-[#FFFFFF] p-12 md:p-20 text-center border border-primary/20 shadow-xl"
         >
-          {/* Logo Icon */}
-          <div className="flex justify-center mb-8">
-            <a href="/">
+          <FloatingMedicalParticles count={6} />
+
+          {/* Logo Icon with 3D Float */}
+          <div className="flex justify-center mb-6 relative z-10">
+            <a href="/" className="hover:scale-105 transition-transform">
               <img
                 src="/nav-logo.png"
                 alt="Dr Baviskar Pathology lab Logo"
-                className="scale-50"
+                className="h-12 rounded-xl"
               />
             </a>
           </div>
 
-          <h2 className="text-4xl md:text-6xl font-display font-bold text-gray-900 mb-8 tracking-tight">
-            Book Your Test with{" "}
-            <span className="text-primary">Dr. Baviskar</span> today!
+          <h2 className="text-3xl sm:text-4xl md:text-6xl font-display font-bold text-gray-900 mb-6 tracking-tight relative z-10">
+            Book Your Health Checkup with{" "}
+            <span className="text-primary">Dr. Baviskar</span> Today!
           </h2>
 
-          <div className="flex flex-wrap justify-center gap-6 md:gap-10 mb-12">
+          <div className="flex flex-wrap justify-center gap-6 md:gap-10 mb-10 relative z-10">
             {[
-              "Customized Setup",
-              "Easily switch from old provider",
-              "No hidden fees",
+              "30-Min Home Sample Collection",
+              "Hospital-Grade Sterile Kits",
+              "Digital WhatsApp & Email Reports",
             ].map((feature) => (
               <div
                 key={feature}
-                className="flex items-center gap-2 text-sm font-medium text-gray-600"
+                className="flex items-center gap-2 text-sm font-semibold text-gray-700 bg-white/80 backdrop-blur-xs px-4 py-1.5 rounded-full border border-gray-100 shadow-xs"
               >
-                <CheckCircle2 className="w-5 h-5 text-primary" />
+                <CheckCircle2 className="w-4 h-4 text-primary" />
                 <span>{feature}</span>
               </div>
             ))}
           </div>
 
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-4 relative z-10">
             <ButtonWithIcon
-              label="Book a Demo"
+              label="Book Test Appointment"
               onClick={() => setIsModalOpen(true)}
-              className="bg-primary text-white shadow-lg shadow-primary/20"
+              className="bg-primary hover:bg-primary-hover text-white shadow-xl shadow-primary/25 hover:scale-105 transition-all"
             />
           </div>
-        </motion.div>
+        </TiltCard>
       </div>
 
       {/* Main Footer */}
