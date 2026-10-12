@@ -75,6 +75,21 @@ export default function AboutDNASpline() {
                 app._camera.zoom = 1.5;
                 app._camera.updateProjectionMatrix();
               }
+
+              // Permanently disable the WebGL post-processing shader pass that renders the watermark
+              const disableWatermarkPass = () => {
+                if (app._renderer?.pipeline?.logoOverlayPass) {
+                  app._renderer.pipeline.logoOverlayPass.enabled = false;
+                }
+              };
+              disableWatermarkPass();
+              requestAnimationFrame(disableWatermarkPass);
+              setTimeout(disableWatermarkPass, 100);
+              setTimeout(disableWatermarkPass, 500);
+
+              if (typeof window !== "undefined") {
+                (window as any).__spline = spline;
+              }
             } catch (e) {
               console.error("Spline init error:", e);
             }
