@@ -11,7 +11,7 @@ import HashScrollHandler from '../components/HashScrollHandler';
 
 // Lazy load heavy sections below the fold
 const AboutSection = dynamic(() => import('../components/AboutSection'), { 
-  loading: () => <div id="home" className="h-screen bg-gray-50 animate-pulse" />,
+  loading: () => <div id="home" className="min-h-[400px] bg-white" />,
   ssr: true 
 });
 const ServicesSection = dynamic(() => import('../components/ServicesSection'), { ssr: true });

@@ -24,7 +24,7 @@ export default function FloatingMedicalParticles({
 
   return (
     <div
-      className={`absolute inset-0 pointer-events-none overflow-hidden select-none z-0 ${className}`}
+      className={`hidden md:block absolute inset-0 pointer-events-none overflow-hidden select-none z-0 ${className}`}
       aria-hidden="true"
     >
       {particles.map((p) => (

@@ -19,7 +19,7 @@ export default function ScrollProgressBar() {
   if (!mounted) return null;
 
   return (
-    <div className="fixed top-0 left-0 right-0 h-[3px] z-[120] pointer-events-none bg-transparent">
+    <div className="hidden md:block fixed top-0 left-0 right-0 h-[3px] z-[120] pointer-events-none bg-transparent">
       <motion.div
         className="h-full bg-gradient-to-r from-[#59afb5] via-[#428e94] to-[#315e63] origin-left shadow-[0_0_12px_rgba(89,175,181,0.8)]"
         style={{ scaleX }}
