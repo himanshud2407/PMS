@@ -16,16 +16,7 @@ export default function SmoothScrollProvider({
       "(prefers-reduced-motion: reduce)"
     ).matches;
 
-    // Disable Lenis completely on mobile and touch devices.
-    // Mobile browsers (iOS Safari, Android Chrome) have native 120Hz GPU hardware-accelerated scrolling.
-    // Running Lenis on mobile hijacks touch events, causing noticeable lag and scroll friction.
-    const isTouchOrMobile =
-      typeof window !== "undefined" &&
-      (window.innerWidth < 768 ||
-        window.matchMedia("(pointer: coarse)").matches ||
-        "ontouchstart" in window);
-
-    if (prefersReducedMotion || isTouchOrMobile) {
+    if (prefersReducedMotion) {
       return;
     }
 

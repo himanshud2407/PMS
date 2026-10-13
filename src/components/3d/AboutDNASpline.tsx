@@ -109,28 +109,9 @@ export default function AboutDNASpline() {
     container.addEventListener("gesturechange", onGesture, { passive: false });
     container.addEventListener("gestureend", onGesture, { passive: false });
 
-    // Pause rendering when out of viewport to eliminate GPU / battery drain
-    const visibilityObserver = new IntersectionObserver(
-      (entries) => {
-        const entry = entries[0];
-        const app = splineAppRef.current;
-        if (!app) return;
-        if (entry.isIntersecting) {
-          if (app.play) app.play();
-          else app._isPaused = false;
-        } else {
-          if (app.stop) app.stop();
-          else app._isPaused = true;
-        }
-      },
-      { rootMargin: "150px" }
-    );
-    visibilityObserver.observe(container);
-
     return () => {
       clearInterval(interval);
       observer.disconnect();
-      visibilityObserver.disconnect();
       window.removeEventListener("resize", handleResize);
       container.removeEventListener("wheel", onWheel);
       container.removeEventListener("gesturestart", onGesture);
@@ -142,7 +123,7 @@ export default function AboutDNASpline() {
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-[320px] xs:h-[360px] sm:h-[480px] md:h-[600px] lg:h-[780px] xl:h-[840px] flex items-center justify-center select-none bg-transparent touch-pan-y pointer-events-none md:pointer-events-auto md:cursor-grab active:cursor-grabbing"
+      className="relative w-full h-[320px] xs:h-[360px] sm:h-[480px] md:h-[600px] lg:h-[780px] xl:h-[840px] flex items-center justify-center select-none bg-transparent cursor-grab active:cursor-grabbing"
     >
       {/* 3D Spline DNA Model */}
       <div className="w-full h-full flex items-center justify-center bg-transparent">
@@ -252,15 +233,6 @@ export default function AboutDNASpline() {
               const watchdogInterval = setInterval(enforceDisableWatermark, 100);
               setTimeout(() => clearInterval(watchdogInterval), 15000);
 
-              const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
-              if (app._renderer) {
-                // Cap mobile pixel ratio to 1.0 to eliminate fragment shader fill rate bottleneck on mobile GPUs
-                const targetDpr = isMobile
-                  ? Math.min(window.devicePixelRatio || 1, 1.0)
-                  : Math.min(window.devicePixelRatio || 1, 1.75);
-                app._renderer.setPixelRatio(targetDpr);
-              }
-
               // Lock zoom completely and prevent wheel / touchpad swipe zoom
               const configureControls = () => {
                 const z = getTargetZoom();
@@ -273,19 +245,8 @@ export default function AboutDNASpline() {
                     oc.minDistance = app._camera.position.z;
                     oc.maxDistance = app._camera.position.z;
                   }
-                  if (isMobile) {
-                    // On mobile, prevent touch hijacking and raycasting spikes over 100,000 particles.
-                    // The DNA model auto-rotates via its own built-in animation smoothly.
-                    oc.enableRotate = false;
-                    oc.enablePan = false;
-                    if (oc.touches) {
-                      oc.touches.ONE = 0;
-                      oc.touches.TWO = 0;
-                    }
-                  } else {
-                    // Full mouse dragging rotation preserved on desktop
-                    oc.enableRotate = true;
-                  }
+                  // Keep full rotation enabled (left, right, up, down)
+                  oc.enableRotate = true;
                 }
               };
               configureControls();
@@ -300,7 +261,6 @@ export default function AboutDNASpline() {
               console.error("Spline init error:", e);
             }
           }}
-          style={{ touchAction: "pan-y" }}
           className="w-full h-full bg-transparent"
         />
       </div>

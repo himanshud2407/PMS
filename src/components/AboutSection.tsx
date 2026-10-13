@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
 import { motion } from "motion/react";
 import dynamic from "next/dynamic";
 import ButtonWithIcon from "./ui/button-with-icon";
@@ -10,45 +9,11 @@ import FloatingMedicalParticles from "./3d/FloatingMedicalParticles";
 
 const AboutDNASpline = dynamic(() => import("./3d/AboutDNASpline"), {
   ssr: false,
-  loading: () => (
-    <div className="w-full h-full min-h-[300px] sm:min-h-[460px] flex flex-col items-center justify-center gap-3">
-      <div className="w-12 h-12 rounded-full border-3 border-[#59afb5]/20 border-t-[#59afb5] animate-spin" />
-      <span className="text-xs font-semibold tracking-wider text-gray-400 uppercase animate-pulse">
-        Loading 3D Diagnostic Model...
-      </span>
-    </div>
-  ),
 });
 
 export default function AboutSection() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const [shouldLoad3D, setShouldLoad3D] = useState(false);
-
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-
-    // Preload 3D model only when user scrolls within 350px of About section
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0]?.isIntersecting) {
-          setShouldLoad3D(true);
-          observer.disconnect();
-        }
-      },
-      { rootMargin: "350px" }
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <section
-      ref={sectionRef}
-      id="home"
-      className="px-4 lg:px-12 pt-16 pb-4 sm:pt-20 sm:pb-12 lg:py-24 bg-white relative overflow-hidden"
-    >
+    <section id="home" className="px-4 lg:px-12 pt-16 pb-4 sm:pt-20 sm:pb-12 lg:py-24 bg-white relative overflow-hidden">
       {/* Ambient background particles */}
       <FloatingMedicalParticles count={4} />
 
@@ -107,16 +72,7 @@ export default function AboutSection() {
 
         {/* 3D Interactive Spline DNA Model */}
         <div className="relative flex items-center justify-center min-h-[320px] xs:min-h-[360px] sm:min-h-[480px] lg:min-h-[800px] w-full h-full">
-          {shouldLoad3D ? (
-            <AboutDNASpline />
-          ) : (
-            <div className="w-full h-full min-h-[300px] sm:min-h-[460px] flex flex-col items-center justify-center gap-3">
-              <div className="w-12 h-12 rounded-full border-3 border-[#59afb5]/20 border-t-[#59afb5] animate-spin" />
-              <span className="text-xs font-semibold tracking-wider text-gray-400 uppercase animate-pulse">
-                Loading 3D Diagnostic Model...
-              </span>
-            </div>
-          )}
+          <AboutDNASpline />
         </div>
       </div>
     </section>

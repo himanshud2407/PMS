@@ -86,17 +86,15 @@ export default function TiltCard({
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className={`relative md:will-change-transform md:[transform-style:preserve-3d] select-none ${className}`}
+      className={`relative will-change-transform [transform-style:preserve-3d] select-none ${className}`}
       style={style}
     >
       {children}
-      {/* Dynamic Specular Light Glare Layer (only active on desktop hover) */}
-      {isHovered && (
-        <div
-          className="pointer-events-none absolute inset-0 rounded-[inherit] overflow-hidden mix-blend-overlay z-30"
-          style={glareStyle}
-        />
-      )}
+      {/* Dynamic Specular Light Glare Layer */}
+      <div
+        className="pointer-events-none absolute inset-0 rounded-[inherit] overflow-hidden mix-blend-overlay z-30"
+        style={glareStyle}
+      />
     </div>
   );
 }
