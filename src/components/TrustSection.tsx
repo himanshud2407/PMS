@@ -10,13 +10,13 @@ const TrustSection: React.FC = () => {
   return (
     <section
       id="trust"
-      className="max-w-7xl mx-auto px-6 py-20 md:py-28 relative overflow-hidden"
+      className="max-w-7xl mx-auto px-6 pt-4 pb-16 sm:pt-14 sm:pb-20 md:py-28 relative overflow-hidden"
       data-purpose="trust-section"
     >
       <FloatingMedicalParticles count={4} />
 
       {/* Header */}
-      <div className="text-center mb-16 relative z-10" data-purpose="section-header">
+      <div className="text-center mb-10 sm:mb-16 relative z-10" data-purpose="section-header">
         <span className="text-xs font-bold uppercase tracking-widest text-[#59afb5] mb-3 block">
           Trusted Clinical Care
         </span>

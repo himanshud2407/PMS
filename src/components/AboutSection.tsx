@@ -13,14 +13,14 @@ const AboutDNASpline = dynamic(() => import("./3d/AboutDNASpline"), {
 
 export default function AboutSection() {
   return (
-    <section id="home" className="px-4 lg:px-12 py-24 bg-white relative overflow-hidden">
+    <section id="home" className="px-4 lg:px-12 pt-16 pb-4 sm:pt-20 sm:pb-12 lg:py-24 bg-white relative overflow-hidden">
       {/* Ambient background particles */}
       <FloatingMedicalParticles count={4} />
 
       {/* Decorative radial glow */}
       <div className="absolute top-1/2 right-10 -translate-y-1/2 w-[650px] h-[650px] bg-primary/10 rounded-full blur-[160px] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 lg:gap-20 items-center relative z-10">
+      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-20 items-center relative z-10">
         <div>
           <span className="text-xs font-bold uppercase tracking-widest text-[#59afb5] mb-4 flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-[#59afb5] animate-ping" />
@@ -71,7 +71,7 @@ export default function AboutSection() {
         </div>
 
         {/* 3D Interactive Spline DNA Model */}
-        <div className="relative flex items-center justify-center min-h-[540px] lg:min-h-[800px] w-full h-full">
+        <div className="relative flex items-center justify-center min-h-[320px] xs:min-h-[360px] sm:min-h-[480px] lg:min-h-[800px] w-full h-full">
           <AboutDNASpline />
         </div>
       </div>

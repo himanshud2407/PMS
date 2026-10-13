@@ -20,31 +20,28 @@ export default function SmoothScrollProvider({
       return;
     }
 
-    // Initialize Lenis with snappy, buttery smooth lerp interpolation
+    // Initialize Lenis with snappy, responsive and crisp scrolling animation
+    // Avoid sluggish 0.1 lerp which causes heavy latency / laggy feel
     const lenis = new Lenis({
-      lerp: 0.1, // Smooth, immediate response without sluggish float delay
-      wheelMultiplier: 1.0,
-      touchMultiplier: 1.0,
+      duration: 0.7, // Snappy 0.7s duration (fast, responsive deceleration)
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Clean exponential deceleration
+      orientation: "vertical",
+      gestureOrientation: "vertical",
       smoothWheel: true,
-      syncTouch: false, // Ensures touchpads and mobile don't have input lag
+      wheelMultiplier: 1.15, // Responsive 1:1 wheel feel
+      touchMultiplier: 1.2,
+      autoRaf: true, // Native high-performance RAF loop managed by Lenis
+      syncTouch: false, // Keep native touch momentum on mobile for zero input lag
     });
 
     lenisRef.current = lenis;
-
-    // RAF loop
-    let rafId: number;
-    function raf(time: number) {
-      lenis.raf(time);
-      rafId = requestAnimationFrame(raf);
-    }
-    rafId = requestAnimationFrame(raf);
 
     // Provide access globally if needed (e.g., modals or anchor jumps)
     (window as any).__lenis = lenis;
 
     return () => {
-      cancelAnimationFrame(rafId);
       lenis.destroy();
+      lenisRef.current = null;
       (window as any).__lenis = null;
     };
   }, []);

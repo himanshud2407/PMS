@@ -7,7 +7,7 @@ import dynamic from "next/dynamic";
 const Spline = dynamic(() => import("@splinetool/react-spline"), {
   ssr: false,
   loading: () => (
-    <div className="w-full h-full min-h-[460px] flex flex-col items-center justify-center gap-3">
+    <div className="w-full h-full min-h-[300px] sm:min-h-[460px] flex flex-col items-center justify-center gap-3">
       <div className="w-12 h-12 rounded-full border-3 border-[#59afb5]/20 border-t-[#59afb5] animate-spin" />
       <span className="text-xs font-semibold tracking-wider text-gray-400 uppercase animate-pulse">
         Loading 3D Diagnostic Model...
@@ -27,21 +27,47 @@ export default function AboutDNASpline() {
     if (!container) return;
 
     const removeWatermark = () => {
-      const candidates = container.querySelectorAll(
-        '#spline-watermark, [id*="spline"], [class*="spline"], a[href*="spline"]'
-      );
+      // 1. Search container and the entire document body (in case Spline appends to body on mobile)
+      const selector =
+        '#spline-watermark, [id*="spline-watermark"], [class*="spline-watermark"], [id*="watermark"], [class*="watermark"], a[href*="spline"], a[aria-label*="Spline"]';
+      const candidates = document.querySelectorAll(selector);
       candidates.forEach((el) => {
         if (el.tagName !== "CANVAS" && !el.querySelector("canvas")) {
-          (el as HTMLElement).style.display = "none";
-          (el as HTMLElement).style.opacity = "0";
-          (el as HTMLElement).style.visibility = "hidden";
-          (el as HTMLElement).style.pointerEvents = "none";
+          (el as HTMLElement).style.setProperty("display", "none", "important");
+          (el as HTMLElement).style.setProperty("opacity", "0", "important");
+          (el as HTMLElement).style.setProperty("visibility", "hidden", "important");
+          (el as HTMLElement).style.setProperty("pointer-events", "none", "important");
+          try {
+            el.remove();
+          } catch (e) {}
+        }
+      });
+
+      // 2. Scan for any elements with "Built with Spline" text
+      const allLinksAndDivs = document.querySelectorAll("a, div, span, button");
+      allLinksAndDivs.forEach((el) => {
+        if (
+          el.tagName !== "CANVAS" &&
+          !el.querySelector("canvas") &&
+          el.textContent?.trim().toLowerCase().includes("built with spline")
+        ) {
+          (el as HTMLElement).style.setProperty("display", "none", "important");
+          try {
+            el.remove();
+          } catch (e) {}
         }
       });
     };
 
     removeWatermark();
-    const interval = setInterval(removeWatermark, 500);
+    const interval = setInterval(removeWatermark, 250);
+
+    const observer = new MutationObserver(() => {
+      removeWatermark();
+    });
+    if (typeof document !== "undefined" && document.body) {
+      observer.observe(document.body, { childList: true, subtree: true });
+    }
 
     const getTargetZoom = () => {
       if (typeof window === "undefined") return 7.2;
@@ -67,11 +93,8 @@ export default function AboutDNASpline() {
     };
     window.addEventListener("resize", handleResize);
 
-    // Stop wheel events from triggering Spline's internal zoom, while allowing standard page scroll
+    // Allow natural wheel scrolling to bubble to Lenis smoothly while preventing browser pinch-to-zoom
     const onWheel = (e: WheelEvent) => {
-      // Prevent Spline canvas from receiving wheel zoom events
-      e.stopImmediatePropagation();
-      // If ctrl is pressed (browser pinch-to-zoom on touchpad), prevent zooming
       if (e.ctrlKey) {
         e.preventDefault();
       }
@@ -79,28 +102,28 @@ export default function AboutDNASpline() {
 
     const onGesture = (e: Event) => {
       e.preventDefault();
-      e.stopImmediatePropagation();
     };
 
-    container.addEventListener("wheel", onWheel, { capture: true, passive: false });
-    container.addEventListener("gesturestart", onGesture, { capture: true, passive: false });
-    container.addEventListener("gesturechange", onGesture, { capture: true, passive: false });
-    container.addEventListener("gestureend", onGesture, { capture: true, passive: false });
+    container.addEventListener("wheel", onWheel, { passive: false });
+    container.addEventListener("gesturestart", onGesture, { passive: false });
+    container.addEventListener("gesturechange", onGesture, { passive: false });
+    container.addEventListener("gestureend", onGesture, { passive: false });
 
     return () => {
       clearInterval(interval);
+      observer.disconnect();
       window.removeEventListener("resize", handleResize);
-      container.removeEventListener("wheel", onWheel, { capture: true } as any);
-      container.removeEventListener("gesturestart", onGesture, { capture: true } as any);
-      container.removeEventListener("gesturechange", onGesture, { capture: true } as any);
-      container.removeEventListener("gestureend", onGesture, { capture: true } as any);
+      container.removeEventListener("wheel", onWheel);
+      container.removeEventListener("gesturestart", onGesture);
+      container.removeEventListener("gesturechange", onGesture);
+      container.removeEventListener("gestureend", onGesture);
     };
   }, []);
 
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-[540px] sm:h-[640px] lg:h-[780px] xl:h-[840px] flex items-center justify-center select-none bg-transparent cursor-grab active:cursor-grabbing"
+      className="relative w-full h-[320px] xs:h-[360px] sm:h-[480px] md:h-[600px] lg:h-[780px] xl:h-[840px] flex items-center justify-center select-none bg-transparent cursor-grab active:cursor-grabbing"
     >
       {/* 3D Spline DNA Model */}
       <div className="w-full h-full flex items-center justify-center bg-transparent">
@@ -150,16 +173,65 @@ export default function AboutDNASpline() {
               setTimeout(applyZoom, 600);
               setTimeout(applyZoom, 1200);
 
-              // Permanently disable the WebGL post-processing shader pass that renders the watermark
-              const disableWatermarkPass = () => {
-                if (app._renderer?.pipeline?.logoOverlayPass) {
-                  app._renderer.pipeline.logoOverlayPass.enabled = false;
+              // Permanently intercept and neutralize WebGL post-processing watermark passes
+              const pipeline = app._renderer?.pipeline;
+              if (pipeline) {
+                // Permanently neutralize pipeline.setWatermark so async mobile network asset loads cannot re-enable it
+                pipeline.setWatermark = function () {
+                  if (this.logoOverlayPass) {
+                    this.logoOverlayPass.enabled = false;
+                  }
+                  this.watermarkTexture = null;
+                  this._effectChainDirty = true;
+                };
+
+                // Neutralize logoOverlayPass safely without triggering texture setter errors
+                if (pipeline.logoOverlayPass) {
+                  pipeline.logoOverlayPass.enabled = false;
+                  pipeline.logoOverlayPass.render = () => {};
+                  try {
+                    Object.defineProperty(pipeline.logoOverlayPass, "enabled", {
+                      get: () => false,
+                      set: () => {},
+                      configurable: true,
+                    });
+                  } catch (e) {}
+                }
+
+                // Lock watermarkTexture to null
+                try {
+                  Object.defineProperty(pipeline, "watermarkTexture", {
+                    get: () => null,
+                    set: () => {},
+                    configurable: true,
+                  });
+                } catch (e) {}
+
+                // Wrap _renderFrame to ensure watermark pass remains disabled on every single frame
+                if (pipeline._renderFrame) {
+                  const origRenderFrame = pipeline._renderFrame.bind(pipeline);
+                  pipeline._renderFrame = function (e: any, t: any) {
+                    if (this.logoOverlayPass) {
+                      this.logoOverlayPass.enabled = false;
+                    }
+                    this.watermarkTexture = null;
+                    return origRenderFrame(e, t);
+                  };
+                }
+              }
+
+              // Long-running watchdog to enforce watermark suppression across slow mobile network downloads
+              const enforceDisableWatermark = () => {
+                if (pipeline?.logoOverlayPass) {
+                  pipeline.logoOverlayPass.enabled = false;
+                }
+                if (pipeline) {
+                  pipeline.watermarkTexture = null;
                 }
               };
-              disableWatermarkPass();
-              requestAnimationFrame(disableWatermarkPass);
-              setTimeout(disableWatermarkPass, 100);
-              setTimeout(disableWatermarkPass, 500);
+              enforceDisableWatermark();
+              const watchdogInterval = setInterval(enforceDisableWatermark, 100);
+              setTimeout(() => clearInterval(watchdogInterval), 15000);
 
               // Lock zoom completely and prevent wheel / touchpad swipe zoom
               const configureControls = () => {

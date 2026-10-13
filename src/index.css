@@ -132,10 +132,17 @@ body {
 #spline-watermark,
 [id*="spline-watermark"],
 [class*="spline-watermark"],
+[id*="watermark"],
+[class*="watermark"],
 a[href*="spline.design"],
+a[href*="spline"],
+a[aria-label*="Spline"],
 spline-viewer::part(watermark) {
   display: none !important;
   opacity: 0 !important;
   visibility: hidden !important;
   pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }
+
