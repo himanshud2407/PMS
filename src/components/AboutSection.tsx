@@ -18,7 +18,7 @@ export default function AboutSection() {
       <FloatingMedicalParticles count={4} />
 
       {/* Decorative radial glow */}
-      <div className="absolute top-1/2 right-10 -translate-y-1/2 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute top-1/2 right-10 -translate-y-1/2 w-[650px] h-[650px] bg-primary/10 rounded-full blur-[160px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 lg:gap-20 items-center relative z-10">
         <div>
@@ -71,7 +71,7 @@ export default function AboutSection() {
         </div>
 
         {/* 3D Interactive Spline DNA Model */}
-        <div className="relative flex items-center justify-center min-h-[460px]">
+        <div className="relative flex items-center justify-center min-h-[540px] lg:min-h-[800px] w-full h-full">
           <AboutDNASpline />
         </div>
       </div>

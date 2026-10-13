@@ -19,12 +19,14 @@ const Spline = dynamic(() => import("@splinetool/react-spline"), {
 export default function AboutDNASpline() {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Observer to cleanly strip out any injected Spline watermark/logo badge
-  useEffect(() => {
-    const removeWatermark = () => {
-      const container = containerRef.current;
-      if (!container) return;
+  const splineAppRef = useRef<any>(null);
 
+  // Observer to cleanly strip out any injected Spline watermark/logo badge & handle zoom resize
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const removeWatermark = () => {
       const candidates = container.querySelectorAll(
         '#spline-watermark, [id*="spline"], [class*="spline"], a[href*="spline"]'
       );
@@ -40,13 +42,65 @@ export default function AboutDNASpline() {
 
     removeWatermark();
     const interval = setInterval(removeWatermark, 500);
-    return () => clearInterval(interval);
+
+    const getTargetZoom = () => {
+      if (typeof window === "undefined") return 7.2;
+      if (window.innerWidth < 640) return 4.2;
+      if (window.innerWidth < 1024) return 5.8;
+      if (window.innerWidth < 1440) return 7.2;
+      return 8.0;
+    };
+
+    const handleResize = () => {
+      const app = splineAppRef.current;
+      if (!app) return;
+      const z = getTargetZoom();
+      if (app._camera) {
+        app._camera.zoom = z;
+        app._camera.updateProjectionMatrix();
+      }
+      const oc = app._controls?.orbitControls;
+      if (oc) {
+        oc.minZoom = z;
+        oc.maxZoom = z;
+      }
+    };
+    window.addEventListener("resize", handleResize);
+
+    // Stop wheel events from triggering Spline's internal zoom, while allowing standard page scroll
+    const onWheel = (e: WheelEvent) => {
+      // Prevent Spline canvas from receiving wheel zoom events
+      e.stopImmediatePropagation();
+      // If ctrl is pressed (browser pinch-to-zoom on touchpad), prevent zooming
+      if (e.ctrlKey) {
+        e.preventDefault();
+      }
+    };
+
+    const onGesture = (e: Event) => {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    };
+
+    container.addEventListener("wheel", onWheel, { capture: true, passive: false });
+    container.addEventListener("gesturestart", onGesture, { capture: true, passive: false });
+    container.addEventListener("gesturechange", onGesture, { capture: true, passive: false });
+    container.addEventListener("gestureend", onGesture, { capture: true, passive: false });
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("resize", handleResize);
+      container.removeEventListener("wheel", onWheel, { capture: true } as any);
+      container.removeEventListener("gesturestart", onGesture, { capture: true } as any);
+      container.removeEventListener("gesturechange", onGesture, { capture: true } as any);
+      container.removeEventListener("gestureend", onGesture, { capture: true } as any);
+    };
   }, []);
 
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-[480px] sm:h-[540px] lg:h-[620px] flex items-center justify-center select-none bg-transparent"
+      className="relative w-full h-[540px] sm:h-[640px] lg:h-[780px] xl:h-[840px] flex items-center justify-center select-none bg-transparent cursor-grab active:cursor-grabbing"
     >
       {/* 3D Spline DNA Model */}
       <div className="w-full h-full flex items-center justify-center bg-transparent">
@@ -58,6 +112,8 @@ export default function AboutDNASpline() {
               spline.setBackgroundColor("transparent");
 
               const app = spline as any;
+              splineAppRef.current = app;
+
               const scene1 = app._scene?.getObjectByName("Scene 1");
               if (scene1) {
                 // Ensure the underlying black emitter mesh remains hidden
@@ -71,10 +127,28 @@ export default function AboutDNASpline() {
                   dnaGroup.position.set(0, 0, 0);
                 }
               }
-              if (app._camera) {
-                app._camera.zoom = 1.5;
-                app._camera.updateProjectionMatrix();
-              }
+
+              const getTargetZoom = () => {
+                if (typeof window === "undefined") return 7.2;
+                if (window.innerWidth < 640) return 4.2;
+                if (window.innerWidth < 1024) return 5.8;
+                if (window.innerWidth < 1440) return 7.2;
+                return 8.0;
+              };
+
+              const applyZoom = () => {
+                const z = getTargetZoom();
+                if (app._camera) {
+                  app._camera.zoom = z;
+                  app._camera.updateProjectionMatrix();
+                }
+              };
+              applyZoom();
+              requestAnimationFrame(applyZoom);
+              setTimeout(applyZoom, 100);
+              setTimeout(applyZoom, 300);
+              setTimeout(applyZoom, 600);
+              setTimeout(applyZoom, 1200);
 
               // Permanently disable the WebGL post-processing shader pass that renders the watermark
               const disableWatermarkPass = () => {
@@ -86,6 +160,27 @@ export default function AboutDNASpline() {
               requestAnimationFrame(disableWatermarkPass);
               setTimeout(disableWatermarkPass, 100);
               setTimeout(disableWatermarkPass, 500);
+
+              // Lock zoom completely and prevent wheel / touchpad swipe zoom
+              const configureControls = () => {
+                const z = getTargetZoom();
+                const oc = app._controls?.orbitControls;
+                if (oc) {
+                  oc.enableZoom = false;
+                  oc.minZoom = z;
+                  oc.maxZoom = z;
+                  if (app._camera?.position?.z) {
+                    oc.minDistance = app._camera.position.z;
+                    oc.maxDistance = app._camera.position.z;
+                  }
+                  // Keep full rotation enabled (left, right, up, down)
+                  oc.enableRotate = true;
+                }
+              };
+              configureControls();
+              requestAnimationFrame(configureControls);
+              setTimeout(configureControls, 100);
+              setTimeout(configureControls, 500);
 
               if (typeof window !== "undefined") {
                 (window as any).__spline = spline;
